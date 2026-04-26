@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>리얼로펌 주간 OPS 리포트 | 2026 4월 4주차</title>
+<style>
+:root {
+  --primary:  #0f2544;
+  --accent:   #d94f2b;
+  --accent2:  #f0a500;
+  --bg:       #f2ede6;
+  --card:     #ffffff;
+  --text:     #1a1a2e;
+  --muted:    #6b7280;
+  --border:   #ddd6cc;
+  --green:    #1a5c3a;
+  --danger:   #c62828;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:"Apple SD Gothic Neo","Malgun Gothic",sans-serif; background:var(--bg); color:var(--text); font-size:15px; line-height:1.7; }
+.wrap { max-width:1000px; margin:0 auto; padding:28px 20px 48px; }
+
+.top-header { background:var(--primary); border-radius:12px; padding:26px 32px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:20px; }
+.th-left { flex:1; }
+.brand { font-size:13px; color:#8892b0; letter-spacing:1.5px; margin-bottom:8px; }
+.th-left h1 { font-size:24px; font-weight:800; color:#fff; line-height:1.4; }
+.meta { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+.meta span { background:rgba(255,255,255,.1); color:#ccd6f6; font-size:13px; padding:4px 12px; border-radius:20px; }
+.report-badge { background:var(--green); color:#fff; font-size:16px; font-weight:800; padding:12px 22px; border-radius:24px; white-space:nowrap; }
+.logo-box { width:80px; height:80px; background:#fff; border-radius:10px; overflow:hidden; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+.logo-box img { width:100%; height:100%; object-fit:contain; border-radius:8px; }
+
+.tab-nav { display:flex; margin-bottom:24px; background:#fff; border-radius:10px; overflow:hidden; border:2px solid var(--border); }
+.tab-btn { flex:1; padding:15px 6px; text-align:center; font-size:13.5px; font-weight:700; color:var(--muted); cursor:pointer; border:none; background:transparent; transition:.18s; line-height:1.4; }
+.tab-btn.active { background:var(--primary); color:#fff; }
+.tab-btn:hover:not(.active) { background:#f7f5f0; }
+
+.section { display:none; }
+.section.active { display:block; }
+
+/* ALERT */
+.alert-box { border-left:5px solid var(--danger); border-radius:8px; padding:16px 20px; margin-bottom:22px; }
+.alert-box.good { border-left-color:var(--green); background:#e8f5e9; }
+.alert-box.warn { border-left-color:#e67e00; background:#fff3e0; }
+.alert-box.danger { border-left-color:var(--danger); background:#fff0ee; }
+.alert-title { font-size:18px; font-weight:800; margin-bottom:10px; }
+.alert-title.good { color:var(--green); }
+.alert-title.danger { color:var(--danger); }
+.alert-content { font-size:15px; color:#333; line-height:2.0; }
+
+/* KPI GRID */
+.kpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:22px; }
+.kpi-grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:22px; }
+.kpi-card { background:var(--card); border-radius:10px; padding:18px 14px; text-align:center; border:2px solid var(--border); }
+.kpi-card.good { border-color:var(--green); background:#f0faf4; }
+.kpi-card.danger { border-color:var(--danger); background:#fff0ee; }
+.kpi-card.warn { border-color:#e67e00; background:#fff8f0; }
+.kpi-label { font-size:13px; color:var(--muted); font-weight:700; margin-bottom:7px; }
+.kpi-val { font-size:26px; font-weight:800; color:var(--primary); }
+.kpi-card.good .kpi-val { color:var(--green); }
+.kpi-card.danger .kpi-val { color:var(--danger); }
+.kpi-diff { font-size:13px; margin-top:6px; font-weight:600; }
+.kpi-diff.up { color:var(--green); }
+.kpi-diff.down { color:var(--danger); }
+.kpi-diff.flat { color:var(--muted); }
+.kpi-diff.warn { color:#e67e00; }
+
+/* FUNNEL */
+.funnel-row { display:flex; align-items:stretch; gap:6px; margin-bottom:12px; }
+.f-card { flex:1; min-width:100px; background:var(--card); border-radius:10px; padding:16px 8px; text-align:center; border:2px solid var(--border); }
+.f-label { font-size:14px; color:var(--muted); font-weight:800; margin-bottom:6px; }
+.f-val { font-size:20px; font-weight:800; color:var(--primary); }
+.f-sub { font-size:12px; color:var(--muted); margin-top:5px; }
+.f-card.f-good .f-val { color:var(--green); }
+.f-card.f-good .f-label { color:var(--green); }
+.f-card.f-danger .f-val { color:var(--danger); }
+.f-card.f-danger .f-label { color:var(--danger); }
+.f-arrow { display:flex; align-items:center; color:#bbb; font-size:18px; flex-shrink:0; }
+
+.bottleneck { background:#fff8e1; border:2px solid var(--accent2); border-radius:8px; padding:14px 18px; margin-bottom:22px; font-size:15px; color:#7a5c00; line-height:1.85; }
+.bottleneck strong { color:#e65100; font-size:16px; }
+.good-note { background:#e8f5e9; border:2px solid var(--green); border-radius:8px; padding:14px 18px; margin-bottom:22px; font-size:15px; color:#1a5c3a; line-height:1.85; }
+
+/* SEC TITLE */
+.sec-title { font-size:18px; font-weight:800; color:var(--primary); padding-left:12px; border-left:4px solid var(--accent); margin:24px 0 12px; }
+
+/* TABLE CARD */
+.table-card { background:var(--card); border-radius:10px; overflow:hidden; margin-bottom:18px; border:2px solid var(--border); }
+.table-card table { width:100%; border-collapse:collapse; }
+.table-card th { background:var(--primary); color:#fff; font-size:14px; font-weight:700; padding:12px; text-align:center; }
+.table-card td { padding:11px 12px; text-align:center; border-bottom:1px solid #f0ebe3; font-size:14px; }
+.table-card tr:last-child td { border-bottom:none; }
+.table-card tr.total-row td { font-weight:800; background:#f7f5f0; }
+.table-card tr.warn-row td { background:#fff8f6; }
+.table-card tr.good-row td { background:#f0faf4; }
+.table-card tr.danger-row td { background:#fff0ee; }
+.table-card tr.highlight-row td { background:#fff8e1; }
+.tag { display:inline-block; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:700; }
+.tag.red { background:#ffeaea; color:var(--danger); }
+.tag.green { background:#e8f5e9; color:var(--green); }
+.tag.yellow { background:#fff8e1; color:#e67e00; }
+.tag.gray { background:#f5f5f5; color:#666; }
+.tag.blue { background:#e3f2fd; color:#1565c0; }
+.tag.navy { background:#e8ecf5; color:var(--primary); }
+
+/* GRID-2 */
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:18px; }
+
+/* SUMMARY CARD */
+.summary-card { background:var(--card); border-radius:10px; padding:18px 20px; border:2px solid var(--border); }
+.s-title { font-size:16px; font-weight:800; color:var(--primary); margin-bottom:12px; }
+.s-row { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #f0ebe3; font-size:14px; }
+.s-row:last-child { border-bottom:none; }
+.s-label { color:var(--muted); }
+.s-val { font-weight:700; }
+.s-val.bad { color:var(--danger); }
+.s-val.good { color:var(--green); }
+.s-val.warn { color:#e67e00; }
+
+/* INSIGHT GRID */
+.insight-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:18px; }
+.insight-card { background:var(--card); border-radius:10px; padding:18px; border-left:5px solid var(--accent2); }
+.insight-card.danger { border-left-color:var(--danger); }
+.insight-card.good   { border-left-color:var(--green); }
+.insight-card.warn   { border-left-color:#e67e00; }
+.insight-card.blue   { border-left-color:#1565c0; }
+.ic-title { font-size:16px; font-weight:800; color:var(--primary); margin-bottom:8px; }
+.ic-body { font-size:14px; color:#444; line-height:1.8; }
+
+/* ACTION BOX */
+.action-box { background:var(--primary); border-radius:10px; padding:20px 24px; margin-bottom:18px; }
+.action-item { display:flex; gap:14px; padding:12px 0; border-bottom:1px solid rgba(255,255,255,.1); align-items:flex-start; }
+.action-item:last-child { border-bottom:none; }
+.a-num { background:var(--accent); color:#fff; font-size:13px; font-weight:800; width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+.a-num.gold { background:var(--accent2); color:var(--primary); }
+.a-num.green { background:var(--green); }
+.a-text { font-size:15px; color:#ccd6f6; line-height:1.8; }
+.a-text strong { color:#fff; font-size:15px; }
+
+/* BOX COMPONENTS */
+.pt-box     { border-left:5px solid #1565c0; background:#e3f2fd; padding:14px 18px; border-radius:7px; font-size:15px; color:#333; line-height:1.8; margin-bottom:14px; }
+.warn-box   { border-left:5px solid #e67e00; background:#fff3e0; padding:14px 18px; border-radius:7px; font-size:15px; color:#333; line-height:1.8; margin-bottom:14px; }
+.danger-box { border-left:5px solid var(--danger); background:#fff0ee; padding:14px 18px; border-radius:7px; font-size:15px; color:#333; line-height:1.8; margin-bottom:14px; }
+.good-box   { border-left:5px solid var(--green); background:#e8f5e9; padding:14px 18px; border-radius:7px; font-size:15px; color:#333; line-height:1.8; margin-bottom:14px; }
+.insight-box{ border-left:5px solid var(--accent2); background:#fff8e1; padding:14px 18px; border-radius:7px; font-size:15px; color:#333; line-height:1.8; margin-bottom:14px; }
+
+/* VS COMPARE */
+.vs-row { display:grid; grid-template-columns:1fr auto 1fr; gap:12px; margin-bottom:18px; align-items:center; }
+.vs-card { background:var(--card); border-radius:10px; padding:16px; border:2px solid var(--border); }
+.vs-card.prev { border-color:#ddd; }
+.vs-card.curr { border-color:var(--green); background:#f0faf4; }
+.vs-label { font-size:12px; font-weight:700; color:var(--muted); margin-bottom:8px; }
+.vs-val { font-size:20px; font-weight:800; }
+.vs-divider { text-align:center; font-size:22px; font-weight:900; color:var(--accent2); }
+
+.report-footer { text-align:center; font-size:13px; color:#aaa; margin-top:32px; padding-top:16px; border-top:2px solid var(--border); }
+.up   { color:var(--green); font-weight:700; }
+.down { color:var(--danger); font-weight:700; }
+.hl   { color:var(--accent); font-weight:700; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- TOP HEADER -->
+<div class="top-header">
+  <div class="logo-box"><img src="data:image/jpeg;base64,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" alt="리얼로펌 로고"></div>
+  <div class="th-left">
+    <div class="brand">법무법인 리얼로펌 · OPS 리포트</div>
+    <h1>주간 마케팅 &amp; 운영 통합 리포트<br>광고 효율 · 상담 퍼널 · 수임 성과 분석</h1>
+    <div class="meta">
+      <span>📅 2026. 04 · 4주차</span>
+      <span>📊 주간 OPS</span>
+      <span>🏷 네이버 파워링크</span>
+      <span>📁 개인회생·파산·기업회생</span>
+      <span>🎯 퍼널 병목 &amp; 수임 성과 진단</span>
+    </div>
+  </div>
+  <div class="report-badge">W4 APR</div>
+</div>
+
+<!-- TAB NAV -->
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab(this,'summary')">📊 1. 분석 요약</button>
+  <button class="tab-btn" onclick="switchTab(this,'data')">📈 2. 상세 DATA</button>
+  <button class="tab-btn" onclick="switchTab(this,'insight')">💡 3. 인사이트 · 액션</button>
+  <button class="tab-btn" onclick="switchTab(this,'strategy')">🔷 4. 전략 판단 리포트</button>
+</div>
+
+
+<!-- ══════════ TAB 1 : 분석 요약 ══════════ -->
+<div id="section-summary" class="section active">
+
+  <!-- 이번 주 핵심 메시지 — 긍정 전환 -->
+  <div class="alert-box good">
+    <div class="alert-title good">✅ 이번 주 핵심 신호 (04.20~04.24) — 뚜렷한 반등</div>
+    <div class="alert-content">
+      · 광고비 <strong>7,398,073원</strong> 집행 → 수임 <strong>12건</strong> · 수임비 합계 <strong>3,460만원</strong> · ROAS <strong>468%</strong><br>
+      · CPA(수임 1건당 광고비) <strong>616,506원</strong> — 지난주 400~800만원 대비 <span class="up">▲ 대폭 개선</span><br>
+      · 클릭 276회 중 전환(상담신청) <strong>87건</strong> · 전환율 <strong>31.5%</strong> — 지난주 17.5% 대비 <span class="up">▲ 2배 향상</span><br>
+      · 리콜 잠재건 <strong>32건</strong> (추후관리 20 + 방문예정 12) — 다음 주 수임 골든타임
+    </div>
+  </div>
+
+  <!-- KPI 4개 -->
+  <div class="kpi-grid">
+    <div class="kpi-card good">
+      <div class="kpi-label">주간 수임 건수</div>
+      <div class="kpi-val">12건</div>
+      <div class="kpi-diff up">▲ 지난주 5건 → 2.4배</div>
+    </div>
+    <div class="kpi-card good">
+      <div class="kpi-label">ROAS</div>
+      <div class="kpi-val">468%</div>
+      <div class="kpi-diff up">▲ 목표 400% 초과 달성</div>
+    </div>
+    <div class="kpi-card warn">
+      <div class="kpi-label">CPA (수임 1건당)</div>
+      <div class="kpi-val">616,506원</div>
+      <div class="kpi-diff warn">목표 50만원 이하 근접</div>
+    </div>
+    <div class="kpi-card good">
+      <div class="kpi-label">클릭→전환율</div>
+      <div class="kpi-val">31.5%</div>
+      <div class="kpi-diff up">▲ 지난주 17.5% → 2배</div>
+    </div>
+  </div>
+
+  <!-- 퍼널 6단계 -->
+  <div class="sec-title">퍼널 전체 흐름 — 광고비 → 노출 → 클릭 → 전환 → 상담일지 → 수임</div>
+  <div class="funnel-row">
+    <div class="f-card">
+      <div class="f-label">광고비 집행</div>
+      <div class="f-val">740만원</div>
+      <div class="f-sub">5일 합계</div>
+    </div>
+    <div class="f-arrow">▶</div>
+    <div class="f-card">
+      <div class="f-label">광고 노출</div>
+      <div class="f-val">25,702</div>
+      <div class="f-sub">회</div>
+    </div>
+    <div class="f-arrow">▶</div>
+    <div class="f-card">
+      <div class="f-label">클릭 유입</div>
+      <div class="f-val">276</div>
+      <div class="f-sub">CTR 1.07%</div>
+    </div>
+    <div class="f-arrow">▶</div>
+    <div class="f-card f-good">
+      <div class="f-label">상담신청 전환</div>
+      <div class="f-val">87</div>
+      <div class="f-sub">전환율 31.5% ✅</div>
+    </div>
+    <div class="f-arrow">▶</div>
+    <div class="f-card">
+      <div class="f-label">상담일지 DATA</div>
+      <div class="f-val">78</div>
+      <div class="f-sub">건 (일지 기준)</div>
+    </div>
+    <div class="f-arrow">▶</div>
+    <div class="f-card f-good">
+      <div class="f-label">수임 완료</div>
+      <div class="f-val">12</div>
+      <div class="f-sub">수임율 15.4% ✅</div>
+    </div>
+  </div>
+  <div class="good-note">
+    ✅ <strong>전환율 31.5%</strong> — 업계 평균(20~30%) 상단 돌파. 지난주 17.5%에서 대폭 개선.<br>
+    ✅ <strong>수임율 15.4%</strong> — KPI 목표(15% 이상) 달성. 지난주 8.1%에서 2배 향상.
+  </div>
+
+  <!-- 전주 비교 -->
+  <div class="sec-title">전주 비교 (3주차 vs 4주차)</div>
+  <div class="table-card">
+    <table>
+      <thead><tr><th>지표</th><th>3주차 (04.13~04.17)</th><th>4주차 (04.20~04.24)</th><th>변화</th><th>KPI 목표</th></tr></thead>
+      <tbody>
+        <tr><td><strong>주간 광고비</strong></td><td>8,118,491원</td><td>7,398,073원</td><td><span class="up">▼ 720,418원 절감</span></td><td>—</td></tr>
+        <tr class="good-row"><td><strong>클릭→전환율</strong></td><td>17.5%</td><td><strong>31.5%</strong></td><td><span class="up">▲ +14.0%p</span></td><td>—</td></tr>
+        <tr class="good-row"><td><strong>수임 건수</strong></td><td>5건</td><td><strong>12건</strong></td><td><span class="up">▲ +7건 (+140%)</span></td><td>—</td></tr>
+        <tr class="good-row"><td><strong>ROAS</strong></td><td>측정불가</td><td><strong>468%</strong></td><td><span class="up">목표 400% 초과</span></td><td>400% 이상</td></tr>
+        <tr class="warn-row"><td><strong>CPA</strong></td><td>400~800만원</td><td><strong>616,506원</strong></td><td><span class="up">▲ 대폭 개선</span></td><td>500,000원 이하</td></tr>
+        <tr class="good-row"><td><strong>상담→수임율</strong></td><td>8.1%</td><td><strong>15.4%</strong></td><td><span class="up">▲ +7.3%p</span></td><td>15% 이상</td></tr>
+        <tr class="good-row"><td><strong>리콜 잠재건</strong></td><td>19건</td><td><strong>32건</strong></td><td><span class="up">▲ +13건</span></td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 상담 결과 분포 -->
+  <div class="sec-title">상담 결과 분포 (상담일지 기준)</div>
+  <div class="grid-2">
+    <div class="table-card">
+      <table>
+        <thead><tr><th>결과 코드</th><th>건수</th><th>비율</th><th>분류</th></tr></thead>
+        <tbody>
+          <tr class="good-row"><td>수임완료</td><td><strong>6</strong></td><td>7.7%</td><td><span class="tag green">수임</span></td></tr>
+          <tr class="good-row"><td>추후관리 (리콜)</td><td><strong>20</strong></td><td>25.6%</td><td><span class="tag yellow">잠재 핵심</span></td></tr>
+          <tr class="good-row"><td>방문예정 (리콜)</td><td><strong>12</strong></td><td>15.4%</td><td><span class="tag yellow">잠재 핵심</span></td></tr>
+          <tr><td>진행미정</td><td>18</td><td>23.1%</td><td><span class="tag blue">관찰</span></td></tr>
+          <tr class="danger-row"><td>진행불가</td><td>7</td><td>9.0%</td><td><span class="tag red">이탈</span></td></tr>
+          <tr><td>단순문의</td><td>6</td><td>7.7%</td><td><span class="tag gray">허수</span></td></tr>
+          <tr class="warn-row"><td>부재중</td><td>5</td><td>6.4%</td><td><span class="tag red">누락위험</span></td></tr>
+          <tr><td>상담대기/기타</td><td>4</td><td>5.1%</td><td><span class="tag gray">기타</span></td></tr>
+          <tr class="total-row"><td>합계</td><td>78</td><td>100%</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="summary-card">
+      <div class="s-title">📌 수임 12건 상세 &amp; 리콜 현황</div>
+      <div class="s-row"><span class="s-label">04.20 수임</span><span class="s-val good">4건 (비대면1·방문3)</span></div>
+      <div class="s-row"><span class="s-label">04.21 수임</span><span class="s-val">0건 (리콜 10건 집중)</span></div>
+      <div class="s-row"><span class="s-label">04.22 수임</span><span class="s-val">0건 (리콜 5건)</span></div>
+      <div class="s-row"><span class="s-label">04.23 수임</span><span class="s-val good">1건</span></div>
+      <div class="s-row"><span class="s-label">04.24 수임</span><span class="s-val good">1건</span></div>
+      <div class="s-row"><span class="s-label">수임 계약 현황 (문건번호 기준)</span><span class="s-val good">12건</span></div>
+      <div class="s-row"><span class="s-label">총 수임비 합계</span><span class="s-val good">3,460만원</span></div>
+      <div class="s-row"><span class="s-label">리콜 잠재건 합계</span><span class="s-val warn">32건</span></div>
+      <div class="s-row"><span class="s-label">— 추후관리 (리콜)</span><span class="s-val warn">20건</span></div>
+      <div class="s-row"><span class="s-label">— 방문예정 (리콜)</span><span class="s-val warn">12건</span></div>
+      <div style="background:#e8f5e9;border-radius:8px;padding:12px;margin-top:12px;font-size:14px;color:var(--green);line-height:1.8;">
+        ✅ ROAS 468% — KPI 목표 400% 초과<br>
+        ⚠️ CPA 616,506원 — 목표 50만원 이하까지 82,506원 차이
+      </div>
+    </div>
+  </div>
+
+</div><!-- /summary -->
+
+
+<!-- ══════════ TAB 2 : 상세 DATA ══════════ -->
+<div id="section-data" class="section">
+
+  <div class="sec-title">일별 광고 성과 (네이버 파워링크)</div>
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr><th>날짜</th><th>노출수</th><th>클릭수</th><th>CTR</th><th>평균 CPC</th><th>총비용</th><th>전환수 (전환율)</th><th>전환당비용</th><th>비고</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>04.20 (월)</td><td>5,471</td><td>48</td><td>0.88%</td><td>27,964원</td><td>1,342,272원</td>
+          <td>15 <span style="color:var(--green);font-size:13px;font-weight:700;">(31.3%)</span></td><td>89,485원</td><td>—</td></tr>
+        <tr><td>04.21 (화)</td><td>5,034</td><td>54</td><td>1.07%</td><td>27,914원</td><td>1,507,375원</td>
+          <td>14 <span style="color:var(--muted);font-size:13px;">(25.9%)</span></td><td>107,670원</td><td>—</td></tr>
+        <tr class="good-row"><td>04.22 (수)</td><td>5,316</td><td>72</td><td>1.35%</td><td>28,602원</td><td>2,059,359원</td>
+          <td><strong>28</strong> <span style="color:var(--green);font-size:13px;font-weight:700;">(38.9%)</span></td><td>73,548원</td><td><span class="tag green">전환 최다</span></td></tr>
+        <tr><td>04.23 (목)</td><td>5,237</td><td>59</td><td>1.13%</td><td>24,149원</td><td>1,424,774원</td>
+          <td>16 <span style="color:var(--muted);font-size:13px;">(27.1%)</span></td><td>89,048원</td><td>—</td></tr>
+        <tr><td>04.24 (금)</td><td>4,644</td><td>43</td><td>0.93%</td><td>24,751원</td><td>1,064,293원</td>
+          <td>14 <span style="color:var(--muted);font-size:13px;">(32.6%)</span></td><td>75,878원</td><td>—</td></tr>
+        <tr class="total-row"><td>합계</td><td>25,702</td><td>276</td><td>1.07%</td><td>26,805원</td><td>7,398,073원</td>
+          <td><strong>87</strong> <span style="color:var(--green);font-size:13px;font-weight:700;">(31.5%)</span></td><td>85,035원</td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="good-box">✅ <strong>전환율 전일 모두 25% 이상:</strong> 지난주 14.4~23.8% 대비 전 구간 안정적으로 향상. 04.22 수요일 38.9%로 주간 최고 기록. CPC도 지난주 30,870원 → 26,805원으로 <span class="up">▼ 13% 개선</span>.</div>
+
+  <!-- 전주 비교 -->
+  <div class="sec-title">전주 대비 광고 성과 비교</div>
+  <div class="table-card">
+    <table>
+      <thead><tr><th>지표</th><th>3주차 (04.13~17)</th><th>4주차 (04.20~24)</th><th>증감</th></tr></thead>
+      <tbody>
+        <tr><td>총 노출수</td><td>18,072</td><td>25,702</td><td><span class="up">▲ +42.2%</span></td></tr>
+        <tr><td>총 클릭수</td><td>263</td><td>276</td><td><span class="up">▲ +5.0%</span></td></tr>
+        <tr class="warn-row"><td>평균 CTR</td><td>1.46%</td><td>1.07%</td><td><span class="down">▼ -0.39%p</span></td></tr>
+        <tr class="good-row"><td>평균 CPC</td><td>30,870원</td><td>26,805원</td><td><span class="up">▼ -13.2% (개선)</span></td></tr>
+        <tr class="good-row"><td>총비용</td><td>8,118,491원</td><td>7,398,073원</td><td><span class="up">▼ -720,418원 절감</span></td></tr>
+        <tr class="good-row"><td>전환수</td><td>46건</td><td>87건</td><td><span class="up">▲ +89.1%</span></td></tr>
+        <tr class="good-row"><td>전환율</td><td>17.5%</td><td>31.5%</td><td><span class="up">▲ +14.0%p</span></td></tr>
+        <tr class="good-row"><td>CPL (전환당 비용)</td><td>176,489원</td><td>85,035원</td><td><span class="up">▼ -51.8% (개선)</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 일별 상담 현황 -->
+  <div class="sec-title">일별 상담 현황 (상담일지 기준)</div>
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr><th>날짜</th><th>전체<br>상담</th><th>수임<br>완료</th><th>추후관리<br>(리콜)</th><th>방문예정<br>(리콜)</th><th>리콜<br>소계</th><th>진행<br>미정</th><th>진행<br>불가</th><th>부재중</th><th>수임<br>전환율</th></tr>
+      </thead>
+      <tbody>
+        <tr class="good-row"><td>04.20 (월)</td><td>17</td><td><strong>4</strong></td><td>3</td><td>1</td><td><span class="up">4</span></td><td>2</td><td>2</td><td>1</td><td><span class="up">23.5%</span></td></tr>
+        <tr class="highlight-row"><td>04.21 (화)</td><td>17</td><td><strong>0</strong></td><td>7</td><td>3</td><td><span class="up">10</span></td><td>5</td><td>1</td><td>1</td><td><span class="down">0%</span></td></tr>
+        <tr><td>04.22 (수)</td><td>17</td><td><strong>0</strong></td><td>3</td><td>2</td><td><span class="up">5</span></td><td>4</td><td>3</td><td>2</td><td><span class="down">0%</span></td></tr>
+        <tr><td>04.23 (목)</td><td>16</td><td><strong>1</strong></td><td>1</td><td>5</td><td><span class="up">6</span></td><td>5</td><td>1</td><td>1</td><td>6.3%</td></tr>
+        <tr><td>04.24 (금)</td><td>11</td><td><strong>1</strong></td><td>6</td><td>1</td><td><span class="up">7</span></td><td>2</td><td>0</td><td>0</td><td>9.1%</td></tr>
+        <tr class="total-row"><td>합계</td><td>78</td><td><strong>6</strong></td><td><strong>20</strong></td><td><strong>12</strong></td><td><strong class="up">32</strong></td><td>18</td><td>7</td><td>5</td><td>7.7%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="insight-box">
+    💡 <strong>04.21 리콜 10건 집중:</strong> 수임 0건이지만 추후관리 7건 + 방문예정 3건 = 10건으로 주간 최다 리콜 발생일. 이번 주 이 리콜 건들의 전환 여부가 5주차 성과를 결정합니다.
+  </div>
+
+  <!-- 수임계약 현황 -->
+  <div class="sec-title">수임계약 현황 (04.20~04.24 · 문건번호 기준)</div>
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr><th>문건번호</th><th>채무자</th><th>유형</th><th>수임비</th><th>서류대행비</th><th>합계</th><th>입금일</th><th>담당</th></tr>
+      </thead>
+      <tbody>
+        <tr class="good-row"><td>2026-04-016</td><td>이상민</td><td>회생</td><td>2,500,000</td><td>220,000</td><td>2,720,000</td><td>04.20</td><td>노현석</td></tr>
+        <tr class="good-row"><td>2026-04-017</td><td>김정빈</td><td>회생</td><td>2,200,000</td><td>220,000</td><td>2,420,000</td><td>04.20</td><td>노현석</td></tr>
+        <tr><td>2026-04-018</td><td>김지연</td><td>회생</td><td>2,500,000</td><td>220,000</td><td>2,720,000</td><td>04.21</td><td>노현석</td></tr>
+        <tr><td>2026-04-019</td><td>정진민</td><td>회생</td><td>2,200,000</td><td>220,000</td><td>2,420,000</td><td>04.21</td><td>노현석</td></tr>
+        <tr><td>2026-04-020</td><td>김영훈</td><td>회생</td><td>2,500,000</td><td>220,000</td><td>2,720,000</td><td>04.21</td><td>노현석</td></tr>
+        <tr><td>2026-04-021</td><td>이재우</td><td>회생</td><td>2,500,000</td><td>220,000</td><td>2,720,000</td><td>04.21</td><td>노현석</td></tr>
+        <tr><td>2026-04-022</td><td>최다연</td><td>회생</td><td>2,500,000</td><td>220,000</td><td>2,720,000</td><td>04.21</td><td>이정주</td></tr>
+        <tr><td>2026-04-023</td><td>임정아</td><td>회생</td><td>2,400,000</td><td>220,000(롯데)</td><td>2,620,000</td><td>04.22</td><td>노현석</td></tr>
+        <tr><td>2026-04-024</td><td>서지유</td><td>회생</td><td>2,400,000</td><td>220,000</td><td>2,620,000</td><td>04.22</td><td>이정주</td></tr>
+        <tr class="highlight-row"><td>2026-04-025</td><td>손정민</td><td>회생</td><td><strong>7,700,000</strong></td><td>330,000(하나)</td><td>8,030,000</td><td>04.22</td><td>이정주</td></tr>
+        <tr><td>2026-04-026</td><td>김선희</td><td>회생</td><td>2,700,000</td><td>220,000(신한)</td><td>2,920,000</td><td>04.23</td><td>이보영</td></tr>
+        <tr><td>2026-04-027</td><td>임소윤</td><td>회생</td><td>2,500,000</td><td>220,000</td><td>2,720,000</td><td>04.24</td><td>이정주</td></tr>
+        <tr class="total-row"><td colspan="3">합계 (12건)</td><td><strong>34,600,000</strong></td><td>2,640,000</td><td><strong>37,130,000</strong></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="pt-box">🔷 <strong>2026-04-025 손정민:</strong> 수임비 7,700,000원으로 이번 주 최고 단가 계약. 04.22 하나카드 결제 확인. 하나카드 3,300,000 + 신한카드 분납 구조.</div>
+  <div class="warn-box">⚠️ <strong>2026-04-028 김태남 (미포함):</strong> 04.23 상담, 04.27 입금예정 3,600,000원. 다음 주 5주차 성과로 이월 처리.</div>
+
+</div><!-- /data -->
+
+
+<!-- ══════════ TAB 3 : 인사이트 · 액션 ══════════ -->
+<div id="section-insight" class="section">
+
+  <div class="sec-title">이번 주 핵심 인사이트</div>
+  <div class="insight-grid">
+    <div class="insight-card good">
+      <div class="ic-title">✅ 퍼널 전 구간 동시 개선</div>
+      <div class="ic-body">전환율 31.5%(↑14%p), CPC 26,805원(↓13%), CPL 85,035원(↓52%), 수임 12건(↑140%). 지난주 구조 붕괴 진단 이후 전 지표가 동시에 반등. 단발성 반등인지 구조적 개선인지 다음 주 추적 필요.</div>
+    </div>
+    <div class="insight-card good">
+      <div class="ic-title">✅ 수임율 15.4% — KPI 목표 달성</div>
+      <div class="ic-body">상담일지 78건 중 수임 6건(상담일지 기준) + 계약서 기준 12건. 목표 15% 이상 달성. 특히 04.20 수임 4건 집중은 지난주 리콜 19건 재연락 효과로 분석됨.</div>
+    </div>
+    <div class="insight-card warn">
+      <div class="ic-title">⚠️ CPA 616,506원 — 목표 대비 23% 초과</div>
+      <div class="ic-body">KPI 목표 500,000원 이하까지 82,506원 차이. ROAS는 468%로 목표 초과했으나 CPA 기준으로는 아직 미달. 추가 수임 2건이면 목표 달성 가능 수준.</div>
+    </div>
+    <div class="insight-card warn">
+      <div class="ic-title">⚠️ CTR 1.07% — 지속 하락 추세</div>
+      <div class="ic-body">지난주 1.46% → 이번 주 1.07%. 노출수는 25,702회로 늘었으나 클릭율은 하락. 소재 피로도 또는 노출 확대에 따른 타겟 희석 가능성. 소재 교체 시점 검토 필요.</div>
+    </div>
+    <div class="insight-card blue">
+      <div class="ic-title">🔵 리콜 32건 — 역대 최다</div>
+      <div class="ic-body">추후관리 20건 + 방문예정 12건. 특히 04.21 리콜 10건 단일 최다. 이번 주 32건 전환율이 다음 주 5주차 성과를 결정. 04.21~04.23 리콜 우선 집중 필요.</div>
+    </div>
+    <div class="insight-card blue">
+      <div class="ic-title">🔵 UTM 미도입 — 채널 기여도 여전히 불명</div>
+      <div class="ic-body">수임 12건 중 광고 직접 기여와 워크인·지인소개 구분 불가. 계약서상 채널 표기(네이버예약·전화유신·지인소개)는 있으나 키워드 레벨 추적 불가. UTM 도입 시 훨씬 정밀한 최적화 가능.</div>
+    </div>
+  </div>
+
+  <div class="sec-title">다음 주 액션플랜 (04.27~05.03)</div>
+  <div class="action-box">
+    <div class="action-item">
+      <div class="a-num green">1</div>
+      <div class="a-text"><strong>[즉시 · 월~화] 리콜 32건 전체 재연락</strong><br>추후관리 20건 + 방문예정 12건 + 부재중 5건. 특히 04.21 리콜 10건, 04.24 리콜 7건 최우선. 결과를 OPS 시트에 기록.</div>
+    </div>
+    <div class="action-item">
+      <div class="a-num green">2</div>
+      <div class="a-text"><strong>[이번 주] 김태남 04.27 입금 확인</strong><br>04.23 상담, 04.27 입금예정 3,600,000원. 5주차 리포트 첫 번째 수임 건으로 처리.</div>
+    </div>
+    <div class="action-item">
+      <div class="a-num">3</div>
+      <div class="a-text"><strong>[이번 주] CTR 하락 대응 — 소재 교체 검토</strong><br>CTR 1.46% → 1.07%로 3주 연속 하락 추세. 이앤미디어에 현재 집행 중인 소재 교체 일정 확인 및 신규 소재 투입 요청.</div>
+    </div>
+    <div class="action-item">
+      <div class="a-num gold">4</div>
+      <div class="a-text"><strong>[이번 주] CPA 50만원 이하 달성 방안</strong><br>현재 CPA 616,506원. 동일 광고비 기준 수임 15건 시 목표 달성 가능. 리콜 32건 전환율 제고가 가장 빠른 경로.</div>
+    </div>
+    <div class="action-item">
+      <div class="a-num">5</div>
+      <div class="a-text"><strong>[다음 주] UTM 유입경로 추적 도입</strong><br>2주 연속 미완료. 수임 12건 중 광고 기여 건수 특정 불가. 다음 주 OPS 리포트부터 반드시 적용 시작.</div>
+    </div>
+    <div class="action-item">
+      <div class="a-num">6</div>
+      <div class="a-text"><strong>[검토] 위픽부스터 도입 결정</strong><br>이번 주 반등이 EN미디어 개선인지 내부 상담 품질 개선인지 불명확. 전략 판단 리포트에서 위픽 도입 여부를 별도 검토.</div>
+    </div>
+  </div>
+
+  <div class="sec-title">다음 캠페인 방향</div>
+  <div class="good-box">
+    ✅ <strong>이번 주 반등의 의미:</strong> 지난주 구조적 붕괴 진단 이후 전 지표가 동시 반등. 단, 이것이 구조적 개선인지 일시적 반등인지는 다음 주 5주차 데이터로 확인해야 합니다.
+    <strong>지금은 섣불리 구조를 바꾸기보다 이번 주 흐름을 유지하면서 리콜 32건 전환에 집중하는 것이 최선입니다.</strong>
+  </div>
+  <div class="pt-box">
+    📋 <strong>다음 주 5주차 OPS 리포트 추가 항목:</strong> ① 리콜 32건 전환 결과 추적 ② UTM 도입 현황 ③ 위픽부스터 도입 결정 결과 ④ CTR 추세 및 소재 교체 효과 ⑤ 4주차 vs 5주차 수임 비교
+  </div>
+
+</div><!-- /insight -->
+
+
+<!-- ══════════ TAB 4 : 전략 판단 리포트 ══════════ -->
+<div id="section-strategy" class="section">
+
+  <!-- 서두 헤더 -->
+  <div style="background:linear-gradient(135deg,#0f2544 0%,#1a3a6e 100%);border-radius:12px;padding:28px 32px;margin-bottom:24px;border-left:6px solid var(--accent);">
+    <div style="display:inline-block;background:var(--accent);color:#fff;font-size:13px;font-weight:800;padding:4px 14px;border-radius:20px;margin-bottom:14px;letter-spacing:1px;">🔷 전략 판단 리포트 · 2026 W4</div>
+    <div style="font-size:22px;font-weight:900;color:#fff;line-height:1.5;margin-bottom:12px;">위픽부스터 CPA+ 제안서 분석<br><span style="color:var(--accent2);">리얼로펌 맞춤 운영전략</span></div>
+    <div style="font-size:15px;color:#ccd6f6;line-height:1.9;">
+      이번 주 반등(ROAS 468%, 수임 12건) 이후 다음 성장 레버로 위픽부스터 도입을 검토합니다.<br>
+      <strong style="color:#fff;">도입 전 구조 이해 → 계약 조건 확인 → 파일럿 실행 기준</strong>을 이 페이지에서 다룹니다.
+    </div>
+  </div>
+
+  <!-- 위픽 분석 콘텐츠 삽입 -->
+  <!-- ══════════════════════════════════════════════════
+     전략 판단 리포트 · 위픽부스터 CPA+ 분석
+     (위픽 분석 보고서에서 발췌 · 2026.04.26)
+═══════════════════════════════════════════════════ -->
+<style>
+/* 위픽 분석 발췌 섹션 전용 스타일 */
+.wp-wrap {
+  font-family:'Apple SD Gothic Neo','맑은 고딕',sans-serif;
+  color:#1a1a2e;
+  font-size:14px;
+  line-height:1.7;
+}
+.wp-wrap :root, .wp-wrap * {
+  --primary:#0f2544;--accent:#d94f2b;--accent2:#f0a500;
+  --bg:#f2ede6;--card:#ffffff;--text:#1a1a2e;--muted:#6b7280;
+  --border:#ddd6cc;--green:#1a5c3a;--danger:#c62828;
+}
+
+/* ── 섹션 제목 배지 ── */
+.wp-wrap .report-section-header {
+  display:flex;align-items:center;gap:12px;
+  background:#0f2544;color:#fff;
+  padding:14px 22px;border-radius:10px;margin:28px 0 16px;
+}
+.wp-wrap .rsh-badge {
+  background:#d94f2b;color:#fff;font-size:10px;font-weight:900;
+  padding:3px 10px;border-radius:4px;letter-spacing:1px;white-space:nowrap;
+}
+.wp-wrap .rsh-title {font-size:15px;font-weight:800;color:#fff;letter-spacing:-.3px}
+
+/* ── sh 섹션 소제목 ── */
+.wp-wrap .sh {
+  font-size:15px;font-weight:800;color:#0f2544;
+  margin:20px 0 12px;padding-bottom:7px;
+  border-bottom:2px solid #ddd6cc;letter-spacing:-.3px;
+}
+.wp-wrap .sn {
+  display:inline-block;background:#d94f2b;color:#fff;
+  font-size:10px;font-weight:900;padding:2px 8px;
+  border-radius:4px;margin-right:10px;vertical-align:middle;
+  font-family:monospace;
+}
+
+/* ── 핵심 결론 카드 ── */
+.wp-wrap .summary-card {
+  background:#0f2544;color:#fff;border-radius:10px;
+  padding:20px 24px;margin-bottom:20px;
+}
+.wp-wrap .sc-label {
+  font-size:11px;color:#8899bb;letter-spacing:1px;
+  text-transform:uppercase;margin-bottom:8px;
+}
+.wp-wrap .sc-text {font-size:15px;font-weight:600;line-height:1.7}
+.wp-wrap .sc-text strong {color:#f0a500}
+
+/* ── trend-row ── */
+.wp-wrap .trend-row {
+  display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;
+}
+.wp-wrap .trend-card {
+  background:#fff;border:1px solid #ddd6cc;border-radius:8px;padding:14px 16px;
+}
+.wp-wrap .tr-label {font-size:11px;font-weight:700;color:#6b7280;letter-spacing:.5px;margin-bottom:6px;text-transform:uppercase}
+.wp-wrap .tr-val {font-size:14px;font-weight:800;color:#0f2544;margin-bottom:4px}
+.wp-wrap .tr-sub {font-size:12px;color:#6b7280;line-height:1.5}
+
+/* ── comp-table ── */
+.wp-wrap .comp-table {width:100%;border-collapse:collapse;margin-bottom:20px;font-size:13px}
+.wp-wrap .comp-table th {background:#0f2544;color:#fff;padding:10px 14px;font-size:11px;font-weight:700;letter-spacing:.5px;text-align:left}
+.wp-wrap .comp-table td {padding:10px 14px;border-bottom:1px solid #ddd6cc;vertical-align:top;line-height:1.6}
+.wp-wrap .comp-table tr:nth-child(even) td {background:#f9f7f4}
+.wp-wrap .comp-table tr:last-child td {border-bottom:none}
+
+/* ── funnel-viz ── */
+.wp-wrap .funnel-viz {display:flex;align-items:stretch;gap:0;margin-bottom:20px;overflow-x:auto}
+.wp-wrap .fv-step {flex:1;text-align:center;padding:0 6px;position:relative;min-width:90px}
+.wp-wrap .fv-step:not(:last-child)::after {content:'▶';position:absolute;right:-6px;top:50%;transform:translateY(-50%);color:#ddd6cc;font-size:12px;z-index:1}
+.wp-wrap .fv-box {background:#fff;border:1px solid #ddd6cc;border-radius:8px;padding:12px 8px;height:100%}
+.wp-wrap .fv-label {font-size:14px;color:#0f2544;font-weight:900;margin-bottom:6px}
+.wp-wrap .fv-val {font-size:11px;font-weight:700;color:#d94f2b;margin-bottom:4px;letter-spacing:.3px;text-transform:uppercase}
+.wp-wrap .fv-sub {font-size:11px;color:#6b7280;line-height:1.4}
+.wp-wrap .fv-step.highlight .fv-box {border-color:#f0a500;background:#fffbf0}
+.wp-wrap .fv-step.warn-step .fv-box {border-color:#c62828;background:#fff5f5}
+
+/* ── insight-grid ── */
+.wp-wrap .insight-grid {display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.wp-wrap .ig-card {background:#fff;border:1px solid #ddd6cc;border-radius:8px;padding:16px 18px;border-top:3px solid #f0a500}
+.wp-wrap .ig-num {font-size:20px;font-weight:900;color:#f0a500;margin-bottom:6px}
+.wp-wrap .ig-title {font-size:13px;font-weight:800;color:#0f2544;margin-bottom:8px}
+.wp-wrap .ig-text {font-size:13px;color:#1a1a2e;line-height:1.7}
+
+/* ── next-plan (로드맵) ── */
+.wp-wrap .next-plan {background:#fff;border:1px solid #ddd6cc;border-radius:10px;padding:20px 24px;margin-bottom:20px}
+.wp-wrap .np-label {font-size:11px;color:#6b7280;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px;font-weight:700}
+.wp-wrap .np-grid-5 {display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.wp-wrap .np-item {background:#fff;border:1px solid #ddd6cc;border-radius:8px;padding:14px 14px}
+.wp-wrap .np-item:nth-child(1){border-top:3px solid #2563eb}
+.wp-wrap .np-item:nth-child(2){border-top:3px solid #f0a500}
+.wp-wrap .np-item:nth-child(3){border-top:3px solid #d94f2b}
+.wp-wrap .np-item:nth-child(4){border-top:3px solid #1a5c3a}
+.wp-wrap .np-item:nth-child(5){border-top:3px solid #0f2544}
+.wp-wrap .np-step {font-size:10px;color:#6b7280;font-weight:900;letter-spacing:1px;margin-bottom:6px;text-transform:uppercase}
+.wp-wrap .np-title {font-size:13px;font-weight:800;color:#0f2544;margin-bottom:8px}
+.wp-wrap .np-desc {font-size:13px;color:#1a1a2e;line-height:1.7}
+
+/* ── cmp-row (관리 시트) ── */
+.wp-wrap .cmp-row {display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.wp-wrap .ci {background:#fff;border:1px solid #ddd6cc;border-radius:8px;padding:16px 18px}
+.wp-wrap .ci.blue{border-top:3px solid #2563eb}
+.wp-wrap .ci.red{border-top:3px solid #c62828}
+.wp-wrap .ci.green{border-top:3px solid #1a5c3a}
+.wp-wrap .ci.gray{border-top:3px solid #6b7280}
+.wp-wrap .ci-label {font-size:15px;font-weight:800;color:#0f2544;margin-bottom:6px}
+.wp-wrap .ci-title {font-size:12px;font-weight:600;color:#6b7280;margin-bottom:10px;letter-spacing:.3px}
+.wp-wrap .ci ul {padding-left:16px;margin-top:6px}
+.wp-wrap .ci ul li {font-size:13px;margin-bottom:4px;line-height:1.6}
+
+/* ── action-list (카드형) ── */
+.wp-wrap .action-list {margin-bottom:20px}
+.wp-wrap .action-list h3 {font-size:13px;font-weight:800;color:#0f2544;margin-bottom:12px}
+.wp-wrap .al-item {display:flex;align-items:flex-start;gap:16px;padding:16px 20px;background:#fff;border:1px solid #ddd6cc;border-radius:10px;margin-bottom:10px;border-left:4px solid #d94f2b}
+.wp-wrap .al-item:nth-child(2){border-left-color:#2563eb}
+.wp-wrap .al-item:nth-child(3){border-left-color:#f0a500}
+.wp-wrap .al-item:nth-child(4){border-left-color:#1a5c3a}
+.wp-wrap .al-item:nth-child(5){border-left-color:#0f2544}
+.wp-wrap .al-item:nth-child(6){border-left-color:#6b7280}
+.wp-wrap .al-num {background:#d94f2b;color:#fff;border-radius:6px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;flex-shrink:0;font-family:monospace}
+.wp-wrap .al-item:nth-child(2) .al-num{background:#2563eb}
+.wp-wrap .al-item:nth-child(3) .al-num{background:#f0a500;color:#0f2544}
+.wp-wrap .al-item:nth-child(4) .al-num{background:#1a5c3a}
+.wp-wrap .al-item:nth-child(5) .al-num{background:#0f2544}
+.wp-wrap .al-item:nth-child(6) .al-num{background:#6b7280}
+.wp-wrap .al-text {font-size:13px;line-height:1.7}
+.wp-wrap .al-text strong {color:#0f2544;font-size:14px}
+
+/* ── insight-box ── */
+.wp-wrap .insight-box {background:#fff;border-left:4px solid #f0a500;border-radius:8px;padding:16px 20px;margin-bottom:16px}
+.wp-wrap .pt-box {background:#fff;border-left:4px solid #2563eb;border-radius:8px;padding:16px 20px;margin-bottom:16px}
+.wp-wrap .danger-box {background:#fff;border-left:4px solid #c62828;border-radius:8px;padding:16px 20px;margin-bottom:16px}
+.wp-wrap .ib-label {font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px}
+.wp-wrap .insight-box .ib-label{color:#f0a500}
+.wp-wrap .pt-box .ib-label{color:#2563eb}
+.wp-wrap .danger-box .ib-label{color:#c62828}
+
+/* ── 컬러 유틸 ── */
+.wp-wrap .up {color:#1a5c3a}
+.wp-wrap .down {color:#c62828}
+.wp-wrap .warn {color:#e67e00}
+.wp-wrap .bold {font-weight:700}
+.wp-wrap .tag {display:inline-block;background:#f2ede6;border:1px solid #ddd6cc;border-radius:4px;font-size:11px;padding:2px 8px;font-weight:600;margin:2px 2px}
+.wp-wrap .tag.red {background:#fff0f0;border-color:#ffcccc;color:#c62828}
+.wp-wrap .tag.green {background:#f0fff4;border-color:#c3e6cb;color:#1a5c3a}
+.wp-wrap .tag.gold {background:#fffbf0;border-color:#ffe08a;color:#996600}
+
+/* ── cost-box ── */
+.wp-wrap .cost-box {background:#fff;border:2px solid #c62828;border-radius:10px;padding:18px 22px;margin-bottom:16px}
+.wp-wrap .cost-box h3 {font-size:13px;font-weight:800;color:#c62828;margin-bottom:12px}
+.wp-wrap .cost-row {display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #ddd6cc;font-size:13px}
+.wp-wrap .cost-row:last-child {border-bottom:none}
+.wp-wrap .cost-label {flex:1;font-weight:600}
+.wp-wrap .cost-formula {flex:2;color:#6b7280}
+.wp-wrap .cost-result {font-weight:800;color:#c62828;white-space:nowrap}
+
+/* 반응형 */
+@media(max-width:768px){
+  .wp-wrap .insight-grid,.wp-wrap .cmp-row,.wp-wrap .trend-row{grid-template-columns:1fr}
+  .wp-wrap .np-grid-5{grid-template-columns:1fr 1fr}
+}
+</style>
+
+<div class="wp-wrap">
+
+<!-- ══════ 발췌 헤더 ══════ -->
+<div style="background:#0f2544;border-radius:12px;padding:22px 28px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center;gap:16px">
+  <div>
+    <div style="font-size:11px;color:#8899bb;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px">
+      <div style="width:28px;height:28px;background:#fff;border-radius:6px;overflow:hidden;flex-shrink:0"><img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgAAZABkAAD/7AARRHVja3kAAQAEAAAAPAAA/+4AJkFkb2JlAGTAAAAAAQMAFQQDBgoNAAAOygAAF9MAACNtAAAxO//bAIQABgQEBAUEBgUFBgkGBQYJCwgGBggLDAoKCwoKDBAMDAwMDAwQDA4PEA8ODBMTFBQTExwbGxscHx8fHx8fHx8fHwEHBwcNDA0YEBAYGhURFRofHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8f/8IAEQgBGwEbAwERAAIRAQMRAf/EAPAAAQACAwEBAAAAAAAAAAAAAAAFBgMEBwECAQEAAwEBAAAAAAAAAAAAAAAAAQIDBAUQAAAFAgIJBAIDAAIDAQAAAAABAgMEEQUQMTBAIRITFBU1BiBCNBYiNnAyJFBgQSMzJREAAQIDAwYJCAkCBwEAAAAAAQIDABESITEEEEGRcrITUWFx4SKCM3M0IECBwdEykhQw8KGx8UJS0iOiNVBwYuJDJCXCEgABAwUAAwEAAAAAAAAAAAAAEBExIEABIUFwkKBhEwACAQIEBAcBAQEBAQAAAAABEQAhMRBBUWFA8HGxIDCBkaHB8dFw4VBg/9oADAMBAAIRAxEAAAHqgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB8oxRAAAAAAAHqc0yAAAAAAAABUa88DXLbmQAAABGRTInfmwiop1bTvAAAAAAAAAqNeeXnSXnQAAAAVmuGdM/bYc6z4+i6dgAAAAAAAAFRrzy86S86AAAACs1wzpn7bDnWfH0XTsAAAAAAAAAqNeeXnSXnQAAAAVmuGdM/bYc6z4+i6dgAAAAAAAAFRrzy86S86AAAACs1wzpn7bDnWfH0XTsAAAAAAAAAqNeeXnSXnQAAAAVmuGdM/bYc6z4+i6dgAAAAAAAAFRrzy86S86AAAACs1wzpn7bDnWfH0XTsAAAAAAAAAqNeeXnSXnQAAAAVmuGdM/bYc6z4+i6dgAAAAAAAAFRrz6EU35uNpaxW1+kgACs1wzpn7bDnWfH0XTsAAAAAAAAAqNefmOfFLTfdm0NXOTnTr+voAACs1wzpn7bDnWfH0XTsAAAAAAAAAqNefmOfF07Ttt1uiFjLjuXn9m19GWnQACs1wzpn7bDnWfH0XTsAAAAAAAAAqNefmOfF07Ttt1uiq15+W58Xa9fSkZuABWa4Z0z9thzrPj6Lp2AAAAAAAAAVGvPzHPi6dp21muFYrjeb9PQr9mvFfk2ptHxTdm1crjnTP22HOs+PounYAAAAAAAABUa8/Mc+Lp2nbMzpxrLzurad87OnJ8+H7Og366zGMdFLZbfOmftsOdZ8fRdOwAAAAAAAACo15+Y58XTtO23W6OZZ8MNGfVNO/lmfBPTtKzevxlpRS836s6Z+2w51nx9F07AAAAAAAAAKjXn5jnxWy281OmirR6c1zt0VauGJFotvWa455mxTtlJGbiCjPqencAAAAAAAABgiNNQAAAAAADInfm4AAAAAAAAAAAAAAAAAAAAAAAAHyj6SAAPEepA+UfSQB4j1I8R6kAADxHqQAK/XGuxjjgJCbYzGjfm8HXLXRKTez23p1ObYmxHQb9kfXGDrzSNtoyuGJHxEY1bTfugq8vwjQjK4X9Co04PDcnS56eiABBVyrUYep8RJzphiPhG/N4KuWsrJzexW2qNOf1OaXQb9kNXmj65SVtoivPlWj4yk7bTFuijZeZITt9ysNuur04htTpcdPQAAHLM+CwztGRSetrDRn9k1OsPGeymGjO+36oGMrVbeqVwttuir58O9bXHER8Y7U6Q9efBFLlp6OupB05py/TL26KTl5snbbWilu09AAAUWnLsJ2Jm1W6IyM8id+b12uMfFMKLhbor8ZaMVyFyv04YrrqbC0VGP2nSjITFuiPrkBMW6K1TjyzOZafv1gAAADFEVKvPIzfAiXnTEjwl50jq4yNtoSvNnW9BqxTNNsMVwq7E3mJ6IqMJi3QAAAAAABqRWjV5fmFitroxUZJm3W6K7TjsV+yo5+f9J1Izwqyk7ytt61Tj2ZuMMV3p0tGncAAAAAABiiItnoRXwkJt4aEVlZvhjL03J0wxXGjwzrSFtYOnNtTf4QMq0jbYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAf/2gAIAQEAAQUC/hlS0pLmGBzDA5hgcwwOYYHMMDmGBzDA5hgcwwOYYHMMDmGBzDA5hgE8yZ6n5P8AAi+PLkR/qyx9WWPqyx9WWPqyx9WWPqyx9WWPqyx9WWLhY1Q48GwKlRfqyx9WWI0U4t81Pyf4Fo7bovIu22LtWD37Pqfk/wAC0dt0XkXbbF2rB79n1Pyf4Fo7bovIu22LtWD37Pqfk/wLR23ReRdtsXasHv2fU/J/gWjtui8i7bYu1YPfs+p+T/AtHbdF5F22xdqwe/Z9T8n+BaO26LyLtti7Vg9+z6n5P8CDf4bET7PAH2eAGvILa4aVpWn1eRdtsXasHv2fU/J/gCJa5kpvoF0D8Z+Oq1XNyG8W31eRdtsXasHv2fU/J/gDxj4AvEdD1vFpWa7d6fIu22LtWD37Pqfk/wAAeMfAF7ubDcUW5k2YPp8i7bYu1YPfs+p+T/AHjHwL9EVHlC0WJziB2QwyGZUZ7BVwgoNDiFp8i7bYu1YPfs+p+T/AHjHwLnCKXEMjI7FO5mI+6TLEWO9c5c+A5bnE/wD6NpT4svcszz0W5+RdtsXasHv2fU/J/gDxj4A8ig8KRbJpxJdw/O326AU11fjZNiap212eDZn5zNuQSLv5F22xdqwe/Z9T8n+ALTeW4Uf7QwJt9iyowt9/KPFfUybxrUpU27RpMJL7yEw3yjyrne2pkW335qLD+0MD7QwGZSZV+1N5hl5PTLeOmW8dMt46Zbx0y3jplvHTLeOmW8dMt46Zbx0y3jplvHTLeOmW8dMt4Rb4SFf8nvJr6jMi9G8mvoIyPGpFoKl6r8pSbbAvbjMSzT0oftjiHL/5MtaUN2B9aJFjfaY8aWtUVya7Hvd2ujskX6bGdhsvExaIcOZdRDel2+53T9gEyO88l6DNaas7ji4lgDpvTrhLhrgFPuSZEe3fCXDUa+TUHeKzInMm7HgxnJSLe4lKoTiXLv6b2047b4cq8xY9oty3HbbHNq++QxZEhCJ19Sh6XfHWfH4z7EZ5u4MXe49WnC+W9lEVEc3rPa7oVvSwblzvN0/YBc5jsVDi7w8za2HWI1gE+GlD/DN9VwXGdiQU7sRnlOZpYwnohKnvPNtQlzIqYKHmziJSi8+q0yrqQ5zyMWp6Su9TuucxJk+RR2mH/I32rf1rj+SOOod5zyMXSVeDjwDM4L801XlKUpKdbZL12F+/+SLnBS2u9QyFgF4cZQNwg8ypSYf/AK4RlaDPfi9T3bQEqSoonPSl8hchBcklcfU149LaHRrmIFldjSxcoipcSDHONEF1tSpyujXMOWCa6mO1wo86xplSvrQR45urDjLTpcjDCGGUC2wXIouEA5Y6bOHTZwTG/wAvRoQ6NCHRoQabS02mzyEH02cIlscZk6J5zhtIv0hTb15aTARdZ6lXCamHGttwTOYjz+NNBy6TROuZRXJk3l2Zs1MZp+cluG9cnGzYmSHFlc6wurOJKXdExz307kG4c2rTzPiMzJEWxy43L+Psdc3rt/quUP8AyXu3d6C+9hhrnXGP9Nob/wBykrN5qfxepM88EdkmvPcGbGLj805yNpbJuVp3m+I0xbEN287KtVvTaZ5Bi3cOfNt3MSHbM+cqDFfjlKt63pDcKSkocYozDELgyIVuTFW3bkomuxN+WZVIrZSFIgpeinBUp3p6OejxOC//AB5//9oACAECAAEFAv49MUFBQUFBQUFBQUFBQUFBTVT0hgtXPSGC1c9IYLVz0hgtXPSGC1c9IYLVz0hgtXMVFRUV0BgtXPGmhMFq54FojBaueBaIwWrngQPCnrMFq54FiXppgYLVzwLA/RT0GC1c8aiuFfXUVFf+9H6DFBQFiegIFjUFqJ4lifqPAgWsnoDFRUED1GmhphQUFPSQMUFMKCgphQUFNJXQ19FcKiorhX/hC1inooKY0xp/H3//2gAIAQMAAQUC/hqoqKioqKioqKioqKioqK6q5kSBwxwxwxwxwxwxwxwxwxwwaKAkVHDHDBFQ9TcyTlonMkZYe7U3Mk5aJzJGWHu1NzJOWicyRlh7tTcyTlonMkZYe7U3Mk5aJzJGWHu1NzJOWicyRlh7tTcyTlonMkZYe7U3MiWOIQ4hDfLQOZIyw92puZAk1G4YoEqp63MkZYe7U3Mg3kFFsCcvS5kjLD3am5kG8gtWCfU5kjLD3am5kG8llglGFRXCpYOZIyw92puZBvJRVwQYMEVQZUGZcMIzcyRlh7tTcyDeQWQSdAeSSqOGD2ESKhObmSMsPdqbmQSug4gNdcCXiasCCl1CVjiDiCu3VN0hukN0hukN0hukN0hukN0hukN0hukN0hukN0hT/qq8iWEGE/2cG4DQGxXapQWY/wDBFUFsNX9goqg0GGj2MA/yUpO6FuVJGW6N0HsNZVJCahBhB/l6V5EZhKQktqyFTFTCCG2qqmFpFNiVUGZq/sHFUB75hsqEwFp20qF0ojIqV/AfgFmE1IICf7+pJmKqCczqDNQ/IFUOCqgozBCu0GnaHhxCHFIMB08DIJy/EbN78cE1Mbiggz3vVuDdMEjBRVBFgpNRumNwEDQOGOHgZDcIUDaKBaKjhmOGY3dnCIcIhwiBEOEY4ZhLdD0e+N/ZvGDOgSdQR4b20LcoFLoFroDXsNwEoxxNnFCnKYIXXUDFdhl+JVCsy2GnMe8EW8C2pL8hmF/2Ko9izCk7d7Y0W3UCTs3Nm6YJO00jcBEFIqZIMJTQEihoRQE3tNO0cPYaKluDc2kmh/x5/9oACAECAgY/AvkQ/9oACAEDAgY/AvbnKsaWSSVe7c3ld0QReQQnD8OLN5JI1Mk2jUukDkW7VZTAybRjGBumbOapocdGV/H3/9oACAEBAQY/Av8AJmaiEjjjtE6RHaJ0iO0TpEdonSI7ROkR2idIjtE6RHaJ0iO0TpEdonSI7ROkR2idIjtE6RHaJ0iO0TpESC0k8E/NEd6NlUIe3wTWJyp548QPh548QPh548QPh548QPh548QPh548QPh548QPh548QPh548QPh548QPh543xdC7QJSlfCHw8E1z6MuAy9UeIHw88eIHw88NsFVVCh0uUT9fmiO9GyqMPq/RnWTDHW2zlGsjYHmiO9GyqMPq/RnWTDHW2zlGsjYHmiO9GyqMPq/RnWTDHW2zlGsjYHmiO9GyqMPq/RnWTDHW2zlGsjYHmiO9GyqMPq/RnWTDHW2zlGsjYHmiO9GyqMPq/RnWTDHW2zlGsjYHmiO9GyqMPq/RnWTDHW2zlGsjYHmiO9GyqGmVocKkCRkBL749x3Qn90e47oT+6JFRb1x7JwFJNSTcR5Z1kwx1ts5RrI2B5ojvRsqyFxlM0g03gW/Ux2Y+JMUvIKDxwJmbCvfT6xE/KOsmGOttnKNZGwPNEd6NlWRfenZTkdqFraStJ4025MOT+mWizyjrJhjrbZyjWRsDzRHejZVkX3p2U5FsIUFPOCmQzA3zyMtm8JE+U2+UdZMMdbbOUayNgeaI70bKsi+9OymKh2L3SHLnGRL+KFKU2paN55cn8riUaxlH8TqVngSZ5JKxDYPBUIqQoKTwi0QdZMMdbbOUayNgeaI70bKsi+9OymFN/nFrZ4xEjeIoUf5WeirkzGHHTchJVohZcdpzrWfuENuNvVA+6sWEERwKeR/V+IjpYgBfAE2ffHy5PRUoocTxiDrJhjrbZyjWRsDzRHejZVkX3p2U5PmEjoPe9rc8Jc/Jc4OIw/TbNsy0QWt6G1ATExOcCvFpTUZJmLzphtltc3Kqa+UlUfMKelMyt6RhpANQS5IK4ZZ4OsmGOttnKNZGwPNEd6NlWRTSmyoldUxyAeqOxVpELZUyrpe6Ziw5jkDDzZcpsSeLggqYBQi8JOaBWonjvgYYoXNEqXCQbRZbBQhxSUKvSCQDDbxFQQZygspbKTMGZ4obYU0pRRO0cZnHYq0iOxVpENvpFIWoWHiTLzSl1AWm+Rjw6NEeHRojw6NEeHRojw6NEeHRojw6NEeHRojw6NEeHRojw6NEeHRojw6NEeHRojw6NEBaGEJULiB/ikp2+XbZ5Ep2+TZlt+gln8pwpMjNNo5YQ2cOt2mf8AJO+3kjEO4hwpQbqpmUzDq0GaVVkGGKVFNqrvRCVfOq6Qncf3Q4786o7tJVKRzCf6odqJV08/JDq5KdAJ/jB4oak2vD01Z75y5IQyhyp1DgrTbmBBht4/kYSZdWF4h7EFCJyHLxDNAwTzm8aXYJ8dxEYXla28iQ06WiLyIW584s0icpq9sTWoqNRtNsP9X1wvD10NImJatkJeYdN8pQGqJKsJPohnVg/98C26fPH9wHxc8NpGJLoMrQePlggLKJdKY4ocUXlJojfvPKAQZBNpnMGFrR7qpy8paG0laiU2DlhLCMGSlE7SlWczh/51ghC7QFTFs4cCUFLQrCeCGdygrpKpy9EBPyQ6Iln9sLaODkHElJvz2cMOJeQUErmAeSHcUzh1OWmmwytEN7zCKTu5ypSc/wCEJdaa/mUsVkTJtBJ+2EMXKUwkemmHMNim1CSp2XwnEpQUstEGZ/02j0kxheVrbyIU2AajLpQU7hFKxeDw9aKHRSqomUP9X1x8w2+GHFfqs5YHzeMQUjMD+AhLLLqOiRIVZhDQmDIXiHfmZ02ylwzj3l/bAIUqc7L4/jaLtcwZZoWkYVaq+I+yN27hFLQtQmVJNnHdC0pEkich5bvyqN/7tddsr5ZxHhEfXrQvfWK6VSMwP2wflJbmyU6fTfBddKQgXnoQl1spKFXHoR/3JbqWam/0RhqFEX3eiPCI+vWhPzLQZRVYpFhnI2e8Yw5N+7RswnBLabW1wqTNXuziSRIcAhjEolukFFVv6VTORrWhILuYZjHRqXyD2w/1fXDW8a3s6pWkSu4I/tq9LkSbwK21fq6Z++G950KU9KqyUT/h0pjdya+W4ZJl7vDyx/w6UxUkzBuIhwJxCk0cZjxZ+2Cw46VhM/LO6xpbnfTMfcY/uK9Kv3R8wt/emRnZbbx5FMJVSTK08Rhtgmooz+nI2pLm73c8074/uK9Kv3RS7jlLTfJUz95htqc92kJnyCUF/fFBMrAOCPFK0c8JV80oyM7ufJJxIVK6cdijRHQbSnkEocrUDXKUuKfthuS6aJ5uH8I8av8Aq9seNX/V7Y3Dyi5ZJSs5i5WmLlaYuVphLafdTdBLeJonfTMeuPGr/q9sb5bu8Of6Nbkp0JKpckb0YFRazrCp/wDzCcY2jeJUqmmcpH7YT/5ywDnn/tgvEVXAJumTBcCaCDSUzn7Ifw1Etz+ad/oyJwtN6aq5+rIlFFZImbZQh4I3iFccr4S5Kuo2CcoGJlOqUk8sNJDFa3U1Ug/ZdEl4ZTaZTqJ5oVit3cqmifrlAW7hVIaP57/UIbkitLgqqnKyK59GU58ULFFFHHPzB7UV90NqaQFJUVpUo5pmyGxUFVuBcxdaIbr3O6sqlOdMYXAj3Qa3fryQ/h7m8R00ct/tjHZG9T25MW8bldBv1fcIcaPvteq0eyMMybm2zX93qEYbBm8OEL5B+JjD7mW8p6M7s8L+YoplZTww5r+yGcLIBt5KJLPojCYcmyimcfJ/89e6lxfWyMS2PyyHmC25yrSUz5YOCWreJM5qlK+3jgYNWImEqqSunNwXwP8A0VyGaX+6HsYtytbliRKVI08UMYhLm7cZPBOf2iHcQ1iyyXTaEp54VvsQcRVdVm+0wH0PbpQErBziFhWKK60lImLp574DQM85VDroV0Xb0Shagqqq6yUhCsTVfOSJZzxw3iKpbsSplEoVhd5eqquXqnCWCZFEqV8kMOKdmpkSNnvfbHzU+px8MPO1T3pnKV3+Xv8A/9oACAEBAwE/If8AGcrMMgA/Wcvfc5e+5y99zl77nL33OXvucvfc5e+5y99zl77nL33OXvucvfc5e+5y99waLFgAnhSgziXkV6x+oj9RH6iP1EfqI/UR+oj9RH6iP1EFooEPzGYDI3BlNuYj9RH6iGPNGCeirwop8D38vk2vE66inwPfy+Ta8TrqKfA9/L5NrxOuop8D38vk2vE66inwPfy+Ta8TrqKfA9/L5NrxOuop8D38vk2vE66ijWBStbMcShQYIjaiPdEFHqSmCNiPHybXitdRQGM6RNIAOZ0giF7b/pHW+wC/Q2PpAEQpab+YfMIAALBqD4uTa8ZrqKFE6axgCzqAsLrS87p4uTa8ZrqKFC61Gd2hJamWABUu6VA9z4uTa8XrqKFD05qBZQ/uqMKk4zQyI5AaYCgRJshujhcgWuCXsK4LsN6gdawWOVjgnqJybXi9dRQp2n0te9oQAVAg6xI0jUPKErhFA1RqBzEr2maAY9BHkoTtUFE6wiBkKScgFPaRDawBbqQPxOkIErAEdCJybXjNdRQoj+FBn9lfeMfX1l72vA1/1zFVJSEY9QVRabRulmQd0ZkSEQkDRF0colF4KyK5NRBMTQtgYJ1nJteK11FCctOABFCuDwfUmiP2YVZFBI6SelukKOhzTaCPiETWyLLZyr5w0Jq1MEufNYCwAoYeg3BQmFC5wBHslfIUwALftj54Rql1iEfThAIbFBsOz+Z+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn4bgbGgg7f+oCIDY6+MMyAb0gIIYqDiQMAFYOvhuwHpiQGSG8BBDFR469Q2eIhS8CNsN97ArjOqzUV6ZCYIUqxjT60DK/wxiMtETXQlphxk/b5uRsmoRjgUEicusGwLwZmlq26TXkTIe0sUDmowYX4QrmDEY3kQKHqYjCGMMjMmAAHDnCwViN8tWhGMBEKtmu1CIaoBqQ1BEs5pJIZnC2QkkHQmKzJMFlgvK7T6EUso1R7ympe+CEmtI6NbT+8kTsEiWsiNUKsN4oNMpTA+gZbB3GkTs+gSuPaF6YDK2XiT7IGzQZQMoaVMhGsokwIBWNLayyrEmjKpg5O7CYSAWQAAkZAoGrKIBgBs9U1MDACBwNMrCYwjKe7CjS23Bbd+oqwVghKEuiSn6w2TIKBCQAQQSKUoZpqDQKQm2gxgKQiEhNhsRC7odAFBk4PcyADQgaE4WBlQSiQkXA11qFCb5Nsn0CB1gMGoAAACJvKEY9DANkHu/g2nOfzBRrA7vtAIGEQkor0BlGw6kaT3ayyIqDKatBgRSkFAKDx0kNcHYNes5kyKDJ3GTtAHZNneatdS8Q2cABXKFBK1YzALFWPSVGfq5atWseUEUkQy0aU5kyPEe0SegCcIIyMSbtISRFaDsklX2gWIOwEPiAiZSKHQOmHynaDtMCIbUDYTMRlQ+mF0r5jrTc8MKvCaWdECnPwF2lCgiZNSf+k52xPOYAlgvyZwDAriGD0IlVdZ5hP8n7Ug9YBZKJA0PjyNGm9WaWngarPIHJjmJE4BEEleFyDhgEEbFkfvAdlAVqUbjTA0JAIoveqLrDG25Oam+IldQqUiuxg61KkzovAOAtQC1PzsrZnUXZOujX5FFOGtZ0biP2I/sRMQZCJJuO5Z8Gc5swiasIcbY9xBP2I1lQEMCy82SfL9DgDRpxPtZLAALnohnQAzbUbKsUGBKwC9AHOGH4LOoWaOVY4o9mZiquB0nzn74AvfD90wpRtrh0awgNDI6QLCIDFAAwbGDZThlCbaMBpYG5dLRsNoU0BGpD6jhYOiaEUysvPzTGvqaSmRFyVtcHzLUmg+Ai4fr10N+0GCUhBuN7BW4Dl+uMuWZWRl7wpMgnVqkj0U3n9Nmt1CuBS2vX0n3hPaFeWx8J2vfD5ntgu0AT9Kl6QI5gwBn/zQQLvaRFMLHWGhP57EEAXT7RbTqvvv3T4nvBo1cSysOiKlXz3Oz944O+K4qKAwnoTwHqcASJqKpIdQIU7DvNqoO1W7zrC9Wi7YZR7cFMUbOgCXcqduwQD6nvGo4ZBo1cDJYg4EUXWrC00Ooc89yBlzUVJq1AjYEEoJk7VypK7dfJFu73OUyruOYNXLyg+tWyF01dcp6vwnfN0vpHOoKfmmNPQ1itYoGiCaeY3n9J1Fog6bdGlVP6noryuJuy7/AOe//9oACAECAwE/If8ASQADAxGfCh55nwoeeZ8KHnmfCh55nwoeeZ8KHnmfCh55nwoeeBnwxYgfLM+IDgPKM+ICcB5RnxIHhPxGfDhGBYXhCl8A8JnxAEBhgGA0EAgv4TPhgOA4BiJwEJgxGfCqKKKKKKKKKKKKKKL/AOWAwGC/hB1hMKZROCG+BERxbmEKGLIot8DAHBBfxGBwCC+BmVwZwuBMoCpcw3wJSsDCRgYMKSkMFIIL+MRmC8LlZWB4GYXBHXAjGng3pgLSkzlMAzEYL+QUAwMGBEWI+EKKAoDjRoosWLiaDzRxwmAx4OuBSEwmPADLMBwBuAMdJlKwwXgvhngKwWl5tDeVmUMIjpwRRRRQiKCGFAIBAkuiwshEUugH+e//2gAIAQMDAT8h/wAaSJEiRIkSJEiRIkSJEjHCzQ51zrnXOudc651zrnXOuKOLOdc65QeFrXnkeF1rzyPC6155Hhda88jwuteeR4XWvPI8LrXnkeFwwFjQ8yI8NiWYRIXjm3lkeI07AdHlEeI0ABYAh5RHh9KOGccCAgA4b0B8JHh9JYNEJCEPH3XCITwkeI0suNYyO6W8NV4kjw2UiwYLBYUN6YDIUZhouIKJCixYGfhCAZsTYmxNibE2JsTYmxNibE2JsTYmxAP/AMtKFpVLhQdoD1hALwqQrLtoMhQFemGrJhlBljA9hUFDaENUzRtAIespQJbhw9gXYIR62iqjGP4gcChKawiJMbQacJRaGArCAcCaKAW8qXaWJgv5SxgUaQgWFedYdBmaJQUZoEMkBECiVUeuCCgUDh56sAihaCvGylZtQzfK9LQCAlK9YVptRGtJaIbeBi2FogTeGeaCCYcW/wCY2xj3lIvCdCn4ikC4+a4SgEvxgxnN6KLwQUUFjt6EznAQji51QbsAm82RAIsIR5TzdTdQXFfB+gKAFo3UMxvyyY+kNyDSiziUaVp4Myoo7xFxUiBUvDjVJoo2dEps3HR8C7IDEojoysIsdZdwNnTBwpXjMSw0EBQb46K820F3WEQyFT0hG65RAOAIlhMh4S4ji9ISbcMM3CsBWAKqODrG4iTR0YaqUiXAu0WTw6/57//aAAwDAQACEQMRAAAQkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkhbbbbbbbekkkkkkkkkgRJJJJNhNkkkkkkkkkgkkkkkh8ikkkkkkkkkgkkkkkh8ikkkkkkkkkgkkkkkh8ikkkkkkkkkgkkkkkh8ikkkkkkkkkgkkkkkh8ikkkkkkkkkgkkkkkh8ikkkkkkkkkgkkkkkh8ikkkkkkkkkgoCMkkh8ikkkkkkkkkglLwkkh8ikkkkkkkkkgglkkkh8ikkkkkkkkkgghkkkh8ikkkkkkkkkggoM+kJ8ikkkkkkkkkggIz2cB8ikkkkkkkkkggjI+4Z8ikkkkkkkkkgl4n7eGf8kkkkkkkkkmtttttttrkkkkkkkkkkkkkkkkkkkkkkkkklkkkIkskhkokkkMkkZWesUA8MfHGf9PskkkRlicXJeMqH+AOvokkkl6sKHzNkdXgfrNZ8kkm5h8X/GcwYBJ/6xckkkki6Akng/6voUkkkkkkkiqfYhh7P6kTkkkkkkkiIBotNYnPZvkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk/9oACAEBAwE/EP8AGQYkFDkQaZCtOACBAgQIECBAgQIECBAhKpo3DsAXwrgSsImSxISA7aeX8+fPnz58+fPjFY2FUm1rpKE1pLks51Wx+fAjHggU7xRUX4VxyjV5fONXEwYXHKNXl841cTBhcco1eXzjVxMGFxyjV5fONXEwYXHKNXl841cTBhcco1eXzjVxMGFxyjV5fONXEwYXA8kjyQEmolVzGLhwZv6KoHUoupKgqVJxzNgHx841cVBhcEb6MAQhCNiFhBgsDj7iIGBkSqAgokVDcoLfO7AUIyvUspog0gwBUEGoI8XONXGQYXDhkwmxVNTcF1wNWxcNyDI/Hi841cZBhcOALcgKiUYFUARdXbB3zB7gNdCjxc41cXBhcOLk+iDEFBpd0CsoA6C8KTcEUtcwlWqcwrz62u3CBPpABRYijUkQQkAEkoCpJhhRAY5NABL1nwc/8CkGc41cXBhcOATAQ8qJg8gLPYwywwhkQBRBB0lLxMFp+qwG3Dzgoalqq/cSj1mUmCDfuAAAgyVqHYouRQXWtI6gwrdkjT0GkOCCKBvQ5DdIOnJaX60ST0c5xq4yDC4cUdjmgUYfO1g0yas6oAkLk0O4jEYA2rBjApdi0rWBwkFClVgfyEBJAHpUpZaQBEl+YR5KA15sQ6Ei0DxokorvAxyxRQAGaAGJzjVxUGFwGKqDlGM2Ag4uaQl56F2oYwKYFTB7DrB0COLXUExLZVAzX7wKcBAIBatX7izHNZNC3RHU50+GYFcPUgLoFQABGbAvB07KsIkhVS1AQMega0C4kEPA4gMSyKVL8IGicbEIIADmiE5X+pyv9Tlf6nK/1OV/qcr/AFOV/qcr/U5X+pyv9Tlf6nK/1OV/qcr/AFOV/qbjqxKEBT/1Cg2NxAgtr+NyYKBIA/WABAAwRUEHEaThoAnQIeFhRbsCn0xUBaZAD5gAQEsRUeMEMDBcSH7eIPGqIEwGoRlaYUiM1n1RlB4gABhQQCFAi0AHCOCAUwUQDDqeHN6kNhMw9fUSNWnP4otjgg0Y9qUaA1AkYkydaRbINzj6e04L5e8VGBQVVAEhChl61eTq3oCIyMdIASeY1z+YSRngCocydcK96Gcm1YHq5ICRIQLKw3BcBCWm6gVvAXJIYSq4MRRZhQ0ikDWbDpACiFwGEDARV5QmCK4uxAL3pnxncwUwBTxWRoS1sMJu++Yu1aMNgU17NWmguGkFAlUM1RRarhFEhKVVobIc8EiEyNfESsQcOCCgNAJd+IxetC+mI9Yo+6ASoDzhjnmFYShDnTeFWwCIKCMyLox6omAgQErbG3YTAkWMMCiLfnEA0cROYg4BrgKkFXfWF/QlDNiqBfjwQgxaAYAmkBopT5NL0EOF7GJ1WDEpATfSJhkK+QqqhDQHMBzk2rAKn5BAMpOEPOPMWMoo5iNColnAFiZa4M+VZ6sAYKqMIV3hnt0WGdQD1SnHnEcAJOTEIZJCEj1NQXECFf8Aq7qnVPyI14FAIhBHujQ/ERFYa2AsVSgwMmQwssLCCRAQUKbiDuiJoWAB4/R7juZRnXsJ+HEaPjazZIgCtUz6NkPykJpgwoIqATcwCDCQJBCoAisfZPZ7NDAuVUSjGn4cRw0egRCIqmWyhCBsxJEUkk3Jl/OvOBMR7MtQ8AXQIIWHCCCCIzaMcxOAzGAEEVYOQn0BYnKpH8YN6J0O1ouC+k5b+oDryTJAXmDWbcnVj/3IUGZIOSTUkxyjn9bdSAAECwRTIgdvkQbVgGJ4AEuAgQAI5Rzh9weMdOECCzfx++zm+4AnrhIMacpQ9TOT1wBw/gIEHQVqoP0dJFgQa4CKSpJERAghKwyBwFgBRBAAA0QcCoIwhDoBlOqHGFASkuGqrCOYg+gSQ71gYXxABI0Yc5A+oR3EN7gJ7fGF5pdGshmeloWLJkM0BEAEmZsXn7z+T95/J+8/kGSQtky3MO73MJDJAJxPDJmKLNCmNHy9xEtztCmrqVb6AJTgAsrWP7AGwEF70BW7hcjZOTAy6AF3lzabSDJU1mUZHk6oAEvBA04+/kD/AKrC/l1gkD1G/ALNXorRAVcltJmmjgEa6wNo06AtQj0yEMs5mKbPKFqSp6IUafUFc2OACppDE0zQFir50t4VctkdBtjIyFNFZBgxaDErqJEQiCrAXcQEjFX/AIFdDBQDDhMKj5w8CYaoSARNKhBormtYVM4FA8CAOlt594JF3S+t421KtRcmghKegpVcULAD4hOT2YqyQAzQC5gxhqFgUqLVHqYGIkRXXs9B9EOEJIs2inep6xkWrkAj6BQIgAELqW+YqpT/AEN2hPBWCxqYCLCSyJE6GFogRoqBZ9yhBjvXsdj9kOq2i5VfrwGwiW53gadnLzcgWcCkJgRqEUf8isQzNhpBsspUtFjBg0hKSEFKXGHCFt4ejYKQNqkAjVdH08cYoRDltIa7iVRAgGZUNLQAGjkQFRA3AloExgLGUQWAEC15mqYp7dSJLsoIZlGhgtSuwLGqNaBBlCImus1LSpNqIUVYbeReZrVqG+l7qVCTmumFL+FWKRPUb4SxWBwI6KjKfSVzRFBIZizq94CdwosgvbVVmq5kt2ikOwB/nv8A/9oACAECAwE/EP8AGmIxGIxGIxGIxGIxGIxGIxGI+EtgYeX/AOgRgeOAk4S2W+XZLMTwm2W+XZLMTwm2W+XZLMTwm2W+XZLMTwm2W+XZLMTwm2W+XZLMTwm2W+XZLMTwm2AAixYA8iyWYnhNuAIxoQRFeOyWYnhNuFuAsYW+KyWYnhNuFuFLAEPFZLMTwm3C2AjhnHAkCAg4JhZLMTwm3C2MGDBCVAGwFmE0VLJZieE24W4ILiDLIydeAbXAslmJ4TbgsRYAjBAh2wCQo4SMaIgKLFgLbhCHEiRIkSJEiRIkSJEiRIn/AMrZEiVqwsEFrCQF5bCkPgFAVAKqEQVLWBjYwiDcNiZ4WiXQMcFLEO/CLBvBYmsh5kw34o0hAEprQIAmbEJLKAhCCGjMpQicWxguS1gWCTFoQCszxZYKidzDBCEtgTrhEmQKQzkgkUIgeOZymxDMVKQkICU1Ic2IaVlkNjAhLwtgRCEzwxRiKCNpTVPTGKKKenDUTehmgnxghnH1iS8AYgIYPj6wlrAEIwudc6sCAbxdIAGKW5NyChHwAAKPrNyILflmNpDS4+kQIwQMVhlYORYcWIVDhRUhTlMyPmIqPgZZAQghQIrIEoSXMDhCoypYLBGwIdFBqgkygNZWAmRnBRPAGChS1R9YKnGFw1twCIwtwHrFBRJJwgRoXLwyI0KXg6TMiST/AJ7/AP/aAAgBAwMBPxD/ABkkC83BNwTcE3BNwTcE3BNwTcE3BNwTcE3BNwTcEBs+Esdf7Dia8eHh4eHh4eHh4eD1DhANePDwl0HhLHX+z4Xl92WfXvj3h24Sx1/s+F5fdln17494duEsdf7PheX3ZZ9e+PeHbhLHX+z4Xl92WfXvj3h24Sx1/s+F5fdln17494duEsdf7PheX3ZZ9e+PeHbhLHX+z4Xl92WfXvj3h24Sx1/sFyBpNg8+s2Dz6w7aAghjx92WfXvj3h24Sx1/uA5hNmGUChfGO7LPr3x7w7cJY6/3C51/mAiPKuDOh4u7LPr3x7w7cJY6/wBwudf5gUAanBKNvF3ZZ9e+PeHbhLHX+4XOv8hX5HAr+HC8FS2EHAiuEAQxO7LPr3x7w7cJY6/3C51/kcjOESnm4jQ6QzZhyBBg90QGq1T2Wndln17494duEsdf7hc6/wAwpCx7xScpWS0jSaiLhCIgNYBYwEA3ndln17494duEsdf7gBRGc2DCQhhWwcMVUCN3lBjSAQQNIn0QaQgBpabBmwYv1HhBiIc2k2k2k2k2k2k2k2k2k2k2k2k2k2k2kDLAH/qMeMnwMeEEG2JKj8bHiIg1DBDGBBCpBEiN4QBIQG/PrCgvQc5wxN6whzU7Qq0MAIGoMWHT6RugI3zBnad8BwBJJ7Ib/wBjiRJec+n7hHMmfECAy8GJEaGfGhyT9v8Asf8AX/YsCpvv1hiAFKsEE4gBNIHq7wBwsX4ikArAoLYQk2jGKFKwaEcDCk8GeGQBVhgxKF2QQSBdAhyUixCYZAAonad8BopXWFIpBCcIufT9waCbWFophvA+mLOKFtB0GveLV8oAkIn5lbDQYQzoP8hdoCRcGnxAEAoK+MNp6v2bLn1hRdU/FQCzb0g5i3pOk+kMCk2XPrDqCPnOfGEcBgEQAC0AQsFh86Dg8m8GszPp+5uQZkaaRZDAiHqmnEM6Qg/xMu9r5dZylAAxURMBhTlOAkYj8dmWb/5/sM8XgVKK9GBDFUpv/n+yhF4gGgl2KdaILbCxgZ+RLUD0lVEFr7hqRSf1OeP9nPH+xju4zr+86/vOv7wQgsIUJQ9H/Zzx/saPligTpAQN1ztBBIcIz8+kFAF1o1TAUFbhvAYkfrFYhDABRuAEjap1hkA5Bp/8iQQNeRA55RSf/IgAkGrkQBoEB3i7F4+Qkt+Av9DBMgaxVuXKodE+UGVuSrn5xPOdcN+aDn2hNfwqP5CfVH2/kKWuCfPqZkeinzLthZTnOko+E1e0H6BOaC5pADMuAcCNYENrCRbm0/7BqOfWIIyyYiAowxBHzrGrhXFJW/7AAQSLCtbe8GlWKA0yKBMW38QBHvl1lQOiEMKBTzi2v+wYTNlWEydVtv8AMzv031lYX/nv/9k=" style="width:100%;height:100%;object-fit:contain" alt="로고"></div>
+      마케팅 분석 허브 · 위픽부스터 분석 리포트 발췌
+    </div>
+    <div style="font-size:18px;font-weight:800;color:#fff;letter-spacing:-.3px">위픽부스터 CPA+ 제안서 분석 및<br><span style="color:#f0a500">리얼로펌 맞춤 운영전략</span></div>
+  </div>
+  <div style="background:#d94f2b;color:#fff;font-size:13px;font-weight:900;padding:8px 16px;border-radius:8px;letter-spacing:1px;white-space:nowrap">WEPICK</div>
+</div>
+
+<!-- ══════ 01. 핵심 결론 ══════ -->
+<div class="report-section-header">
+  <span class="rsh-badge">01</span>
+  <span class="rsh-title">위픽의 본질 — 한 줄 결론</span>
+</div>
+<div class="summary-card">
+    <div class="sc-label">핵심 결론</div>
+    <div class="sc-text">
+      위픽은 <strong>광고 대행사가 아닌 성과형 리드 공급 플랫폼</strong>이다. "결과를 구매하는 구조"는 매력적이지만, 실질적인 계약 전환은 온전히 <strong>리얼로펌의 응대 속도·상담 품질·데이터 관리 역량</strong>에 달려 있다. 위픽 도입의 성패는 DB를 구매하느냐가 아니라, <strong>들어온 리드를 몇 분 안에 처리하고 무엇을 기록하느냐</strong>로 결정된다.
+    </div>
+  </div>
+
+<!-- ══════ 02. 탭2 STEP01 — 3중 구조 ══════ -->
+<div class="report-section-header">
+  <span class="rsh-badge">02</span>
+  <span class="rsh-title">위픽 서비스 3중 구조 분석</span>
+</div>
+<h2 class="sh"><span class="sn">STEP 01</span>위픽 서비스 3중 구조 분석</h2>
+  <div class="trend-row">
+    <div class="trend-card">
+      <div class="tr-label">구조 ①</div>
+      <div class="tr-val" style="font-size:14px;font-weight:800">성과형 광고 상품화</div>
+      <div class="tr-sub">클릭·노출이 아닌 상담신청·예약 단위로 구매. 광고 "과정"이 아닌 "결과"를 파는 프레임. 시뮬레이터가 광고주의 자기 설득 장치.</div>
+    </div>
+    <div class="trend-card">
+      <div class="tr-label">구조 ②</div>
+      <div class="tr-val" style="font-size:14px;font-weight:800">광고주 교육 플랫폼</div>
+      <div class="tr-sub">플레이북·인사이트·전자책이 콘텐츠 마케팅 역할. "개인회생 DB 버리고 있었을지도"류 제목으로 문제 인식 → 위픽 해법 수용 구조.</div>
+    </div>
+    <div class="trend-card">
+      <div class="tr-label">구조 ③</div>
+      <div class="tr-val" style="font-size:14px;font-weight:800">리드 운영 매뉴얼 판매</div>
+      <div class="tr-sub">콜 스크립트·상담 흐름·서류 수집 전략까지 포함. 오프닝→탕감액 제시→클로징→서류 요청 전 과정이 미니 CRM 역할.</div>
+    </div>
+  </div>
+
+  
+
+<!-- ══════ 03. 탭2 STEP02 — 홈페이지 세일즈 퍼널 ══════ -->
+<div class="report-section-header">
+  <span class="rsh-badge">03</span>
+  <span class="rsh-title">위픽 홈페이지 세일즈 퍼널 — 5단계 설계</span>
+</div>
+<h2 class="sh"><span class="sn">STEP 02</span>위픽 홈페이지 세일즈 퍼널 — 5단계 설계</h2>
+  <table class="comp-table">
+    <tr>
+      <th>단계</th>
+      <th>화면 메시지·기능</th>
+      <th>진짜 설계 의도</th>
+      <th>리얼이 주목할 점</th>
+    </tr>
+    <tr>
+      <td class="bold">① 불안 자극</td>
+      <td>"불확실한 광고, 이제 확실한 성과로"</td>
+      <td>광고주의 기존 불만 언어화</td>
+      <td>대표의 현재 불만과 정확히 일치 — 설득력 높음</td>
+    </tr>
+    <tr>
+      <td class="bold">② 기존 부정</td>
+      <td>"과정 아닌 성과 / 추측 아닌 데이터 / 감 아닌 전략"</td>
+      <td>기존 광고대행 방식 전체 부정</td>
+      <td>EN미디어 방식과 대비되어 매력적으로 보임</td>
+    </tr>
+    <tr>
+      <td class="bold">③ 자기 설득</td>
+      <td>마케팅 성과 시뮬레이터 (업종·예산·객단가 입력)</td>
+      <td>광고주가 스스로 구매 타당성 계산</td>
+      <td>법률 업종 평균단가 49,438원 노출 — 기대 심리 형성</td>
+    </tr>
+    <tr>
+      <td class="bold">④ 선결제 유도</td>
+      <td>광고 충전금 (300만원~ / 무통장 2% 적립)</td>
+      <td>현금 먼저 확보 후 성과 차감</td>
+      <td>결제 즉시 광고 서비스 제공 → 현금성 환불 불가</td>
+    </tr>
+    <tr>
+      <td class="bold">⑤ 이탈 차단</td>
+      <td>성과 발생 건 환불 불가 / 미발생 15% 차감</td>
+      <td>계약 후 빠져나가기 어렵게 설계</td>
+      <td>제작 착수 후 취소 시 소재 제작비·랜딩 제작비 공제</td>
+    </tr>
+  </table>
+
+  
+
+<!-- ══════ 04. 탭1 STEP01 — 서비스 구조 전체 흐름 ══════ -->
+<div class="report-section-header">
+  <span class="rsh-badge">04</span>
+  <span class="rsh-title">위픽 서비스 구조 전체 흐름</span>
+</div>
+<h2 class="sh"><span class="sn">STEP 01</span>위픽 서비스 구조 전체 흐름</h2>
+
+  <div class="funnel-viz">
+    <div class="fv-step">
+      <div class="fv-box">
+        <div class="fv-label">충전금 결제</div>
+        <div class="fv-val">선결제</div>
+        <div class="fv-sub">최소 300만원~<br>최대 3개월 유효</div>
+      </div>
+    </div>
+    <div class="fv-step">
+      <div class="fv-box">
+        <div class="fv-label">캠페인 세팅</div>
+        <div class="fv-val">위픽 운영</div>
+        <div class="fv-sub">업종·지역·타겟<br>소재 제작 포함</div>
+      </div>
+    </div>
+    <div class="fv-step">
+      <div class="fv-box">
+        <div class="fv-label">필터링</div>
+        <div class="fv-val">본인인증</div>
+        <div class="fv-sub">+30% 옵션<br>자격 확인</div>
+      </div>
+    </div>
+    <div class="fv-step highlight">
+      <div class="fv-box">
+        <div class="fv-label">과금 시점</div>
+        <div class="fv-val">상담신청 완료</div>
+        <div class="fv-sub">← 여기서 차감<br>환불 불가</div>
+      </div>
+    </div>
+    <div class="fv-step">
+      <div class="fv-box">
+        <div class="fv-label">콜백 (우리)</div>
+        <div class="fv-val">5분 내 필수</div>
+        <div class="fv-sub">속도 = 전환율<br>아웃바운드형</div>
+      </div>
+    </div>
+    <div class="fv-step warn-step">
+      <div class="fv-box">
+        <div class="fv-label">수임 결정</div>
+        <div class="fv-val">리얼로펌</div>
+        <div class="fv-sub">위픽 책임 없음<br>내부 역량 100%</div>
+      </div>
+    </div>
+  </div>
+
+  
+
+<!-- ══════ 05. 탭2 STEP05 — CAC 시나리오 ══════ -->
+<div class="report-section-header">
+  <span class="rsh-badge">05</span>
+  <span class="rsh-title">CAC 실전 시나리오 — 제안서 단가(CPA+ 75,000원) 기준</span>
+</div>
+<h2 class="sh"><span class="sn">STEP 05</span>CAC 실전 시나리오 — 제안서 단가(CPA+ 75,000원) 기준</h2>
+  <div class="pt-box" style="margin-bottom:12px">
+    <div class="ib-label">📌 단가 기준 안내</div>
+    <p>본 시나리오는 위픽이 리얼로펌에 직접 제시한 <strong>제안서 공식 단가 CPA+ 75,000원</strong>을 기준으로 계산합니다. 홈페이지 시뮬레이터의 일반 표시 단가(49,438원)가 아닌, 우리에게 제시된 계약 단가가 실질적인 판단 기준입니다.</p>
+  </div>
+  <table class="comp-table">
+    <tr>
+      <th>시나리오</th>
+      <th>제안서 단가<br>(CPA+ 기준)</th>
+      <th>리드 수<br>(300만원 기준)</th>
+      <th>수임전환율</th>
+      <th>계약 건수<br><span style="font-weight:500;font-size:10px">(수임료 합계)</span></th>
+      <th>총 광고비</th>
+      <th>CAC</th>
+      <th>수임료 250만 대비<br><span style="font-weight:500;font-size:10px">(광고비 회수율)</span></th>
+    </tr>
+    <tr>
+      <td class="bold">낙관</td>
+      <td>75,000원</td>
+      <td>40건</td>
+      <td>15%</td>
+      <td><strong>6건</strong><br><span class="up" style="font-size:12px;font-weight:700">(1,500만원)</span></td>
+      <td>300만원</td>
+      <td class="up">50만원</td>
+      <td class="up">▲ 20% — 순이익 약 1,200만원</td>
+    </tr>
+    <tr>
+      <td class="bold">기본</td>
+      <td>75,000원</td>
+      <td>40건</td>
+      <td>10%</td>
+      <td><strong>4건</strong><br><span style="font-size:12px;font-weight:700;color:var(--text)">(1,000만원)</span></td>
+      <td>300만원</td>
+      <td>75만원</td>
+      <td>▶ 30% — 순이익 약 700만원</td>
+    </tr>
+    <tr>
+      <td class="bold warn">주의</td>
+      <td>75,000원</td>
+      <td>40건</td>
+      <td>5%</td>
+      <td><strong>2건</strong><br><span class="warn" style="font-size:12px;font-weight:700">(500만원)</span></td>
+      <td>300만원</td>
+      <td class="warn">150만원</td>
+      <td class="warn">▶ 60% — 순이익 약 200만원</td>
+    </tr>
+    <tr>
+      <td class="bold down">위험</td>
+      <td>75,000원</td>
+      <td>40건</td>
+      <td>3%</td>
+      <td><strong>1.2건</strong><br><span class="down" style="font-size:12px;font-weight:700">(300만원)</span></td>
+      <td>300만원</td>
+      <td class="down">250만원</td>
+      <td class="down">▼ 100% — 광고비 회수 한계선</td>
+    </tr>
+    <tr>
+      <td class="bold down" style="background:#fff0f0">전멸</td>
+      <td>75,000원</td>
+      <td>40건</td>
+      <td>0%</td>
+      <td><strong style="color:var(--danger)">0건</strong><br><span class="down" style="font-size:12px;font-weight:700">(0원)</span></td>
+      <td>300만원</td>
+      <td class="down">∞</td>
+      <td class="down">▼ 순손실 45만원 (환불 255만원)</td>
+    </tr>
+  </table>
+  <div class="danger-box">
+    <div class="ib-label">🔴 핵심 경고 — 전멸 시나리오</div>
+    <p>위픽 리드가 전혀 전환되지 않더라도 300만원 전액 환불은 되지 않습니다. 성과 미발생 건이라도 소진액의 <strong class="down">15% 수수료가 차감</strong>됩니다. 300만원 집행 후 성과 0건이면 환불액은 약 255만원, 실질 손실은 <strong class="down">45만원</strong>입니다. 수임료 250만원짜리 계약 1건도 없이 45만원을 잃는 구조입니다.</p>
+  </div>
+
+  
+
+<!-- ══════ 06. 탭3 전체 — 인사이트·액션 ══════ -->
+<div class="report-section-header">
+  <span class="rsh-badge">06</span>
+  <span class="rsh-title">인사이트 · 액션 플랜</span>
+</div>
+<h2 class="sh"><span class="sn">STEP 01</span>핵심 인사이트 4가지</h2>
+  <div class="insight-grid">
+    <div class="ig-card">
+      <div class="ig-num">01</div>
+      <div class="ig-title">위픽은 광고 구매가 아니라 "상담 기회" 구매다</div>
+      <div class="ig-text">위픽이 제공하는 건 수임이 아니라 상담신청·예약·방문입니다. 계약은 리얼로펌이 100% 만들어야 합니다. "전환 부담 0"은 마케팅 언어이고, 콜백 속도·상담 스크립트·서류 수집 속도가 실제 성과를 결정합니다.</div>
+    </div>
+    <div class="ig-card">
+      <div class="ig-num">02</div>
+      <div class="ig-title">단가는 CPA 단가가 아닌 "옵션 포함 실질 단가"로 봐야 한다</div>
+      <div class="ig-text">제안서의 CPA 35,000·CPA+ 75,000원은 기본 단가입니다. 본인인증 +30%, 지역 할증, 장기부재 A/S +30% 등 옵션이 붙으면 실질 단가가 크게 달라집니다. 법률 업종 시뮬레이터 기준 49,438원에 본인인증 포함 시 약 64,000원 수준입니다.</div>
+    </div>
+    <div class="ig-card">
+      <div class="ig-num">03</div>
+      <div class="ig-title">기존 인바운드와 절대 혼합하면 안 된다</div>
+      <div class="ig-text">기존 고객(먼저 전화·고의지)과 위픽 리드(우리가 전화·의지 불확실)는 완전히 다른 상담 방식이 필요합니다. 같은 담당자, 같은 시트, 같은 접근법으로 처리하면 데이터 왜곡과 전환율 붕괴가 발생합니다.</div>
+    </div>
+    <div class="ig-card">
+      <div class="ig-num">04</div>
+      <div class="ig-title">위픽의 진짜 가치는 "리드" 자체가 아니라 "전환 패턴 학습"이다</div>
+      <div class="ig-text">어떤 조건의 리드가 계약되고, 왜 안 되는지를 기록하면 그것이 리얼로펌의 영구 자산이 됩니다. 반대로 기록 없이 운영하면 돈을 쓰고도 아무것도 남지 않습니다. 위픽은 도구이고, 데이터가 목적입니다.</div>
+    </div>
+  </div>
+
+  <h2 class="sh"><span class="sn">STEP 02</span>리얼로펌 맞춤 위픽 활용 전략 — 5단계 실행 로드맵</h2>
+  <div class="next-plan">
+    <div class="np-label">단계별 실행 계획</div>
+    <div class="np-grid-5">
+      <div class="np-item">
+        <div class="np-step">STEP 1</div>
+        <div class="np-title">계약 전 내부 준비</div>
+        <div class="np-desc">콜백 담당자·SLA 기준·리드 관리 시트를 계약 전에 먼저 만든다. 준비 없이 리드 받으면 손실.</div>
+      </div>
+      <div class="np-item">
+        <div class="np-step">STEP 2</div>
+        <div class="np-title">최소 단위 파일럿</div>
+        <div class="np-desc">전화상담예약 500만원으로 시작. 4~6주간 연결률·CAC·미계약사유 데이터 수집이 목표.</div>
+      </div>
+      <div class="np-item">
+        <div class="np-step">STEP 3</div>
+        <div class="np-title">리드 완전 분리 운영</div>
+        <div class="np-desc">기존 유입 시트 ≠ 위픽 유입 시트. 계약 이후만 통합. 혼합 절대 금지.</div>
+      </div>
+      <div class="np-item">
+        <div class="np-step">STEP 4</div>
+        <div class="np-title">KPI 주간 측정</div>
+        <div class="np-desc">연결률·상담전환율·수임계약률·CAC·미계약사유 TOP 5. CAC ÷ 수임료가 최종 판단 기준.</div>
+      </div>
+      <div class="np-item">
+        <div class="np-step">STEP 5</div>
+        <div class="np-title">데이터 기반 확대 결정</div>
+        <div class="np-desc">6주 데이터 검토 후 확대·유지·중단 결정. 감이 아닌 CAC 수치로만 판단.</div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="sh"><span class="sn">STEP 03</span>위픽 리드 전용 관리 시트 — 필수 항목</h2>
+  <div class="cmp-row">
+    <div class="ci blue">
+      <div class="ci-label">기본 정보 영역</div>
+      <div class="ci-title">유입 데이터</div>
+      <ul>
+        <li>리드ID / 유입일시 / 상품유형</li>
+        <li>광고단가 (옵션 포함 실질 단가)</li>
+        <li>고객명 / 연락처 / 지역</li>
+        <li>채무규모 / 연체여부 / 소득여부</li>
+        <li>직업 / 부양가족</li>
+      </ul>
+    </div>
+    <div class="ci red">
+      <div class="ci-label">콜 관리 영역 (핵심)</div>
+      <div class="ci-title">속도 추적</div>
+      <ul>
+        <li>1차/2차/3차 콜 시각 기록</li>
+        <li>연결 여부 (O/X)</li>
+        <li>연결까지 소요 시간 (자동 계산)</li>
+        <li>미연결 사유</li>
+        <li class="down bold">→ 콜 타이밍 vs 리드 품질 문제 분리 가능</li>
+      </ul>
+    </div>
+  </div>
+  <div class="cmp-row">
+    <div class="ci green">
+      <div class="ci-label">상담 · 계약 영역</div>
+      <div class="ci-title">전환 추적</div>
+      <ul>
+        <li>상담 진행 여부 / 상담 시각</li>
+        <li>예약 여부 / 방문 여부</li>
+        <li>계약 여부 (O/X)</li>
+        <li>계약 금액 / 사건 유형</li>
+      </ul>
+    </div>
+    <div class="ci gray">
+      <div class="ci-label">실패 분석 영역 (진짜 핵심)</div>
+      <div class="ci-title">왜 계약이 안 됐는가</div>
+      <ul>
+        <li>미계약 사유 (상세 기록)</li>
+        <li>가격 문제 여부 / 자격 미달 여부</li>
+        <li>경쟁사 비교 언급 여부</li>
+        <li class="bold" style="color:var(--primary)">→ 6주 후 미계약사유 TOP 5가 위픽 지속 여부를 결정</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2 class="sh"><span class="sn">STEP 04</span>즉시 실행 체크리스트</h2>
+  <div class="action-list">
+    <h3>📋 위픽 계약 전 반드시 완료해야 할 것들</h3>
+    <div class="al-item">
+      <div class="al-num">1</div>
+      <div class="al-text"><strong>콜백 SLA 내부 확정 (계약 전)</strong> — 5분 이내 1차 콜을 누가, 어떻게 실행할지 구체적 프로세스를 먼저 정의한다. 담당자 미지정 상태로 계약하면 리드가 와도 처리 불가.</div>
+    </div>
+    <div class="al-item">
+      <div class="al-num">2</div>
+      <div class="al-text"><strong>위픽 전용 리드 관리 시트 사전 제작</strong> — 계약 전 시트를 완성해 놓고, 리드 수신 즉시 기록 시작. 기억은 데이터가 아니다.</div>
+    </div>
+    <div class="al-item">
+      <div class="al-num">3</div>
+      <div class="al-text"><strong>계약서 조건 서면 확인 3가지</strong> — ① 옵션 포함 실질 단가 확정 ② 제작비 규모 명시 ③ "성과 단위" 정의(어디까지를 상담신청 완료로 인정하는지) 를 반드시 서면화한다.</div>
+    </div>
+    <div class="al-item">
+      <div class="al-num">4</div>
+      <div class="al-text"><strong>3개월 유효기간 감안한 집행 계획 수립</strong> — 충전금 결제일로부터 3개월 내에 리드를 모두 소진해야 한다. 여름·명절 등 상담 감소 기간을 피해 시작 시점을 결정한다.</div>
+    </div>
+    <div class="al-item">
+      <div class="al-num">5</div>
+      <div class="al-text"><strong>파일럿 성과 판단 기준 사전 합의</strong> — "잘 됐다/안 됐다"를 감으로 판단하지 않도록, 시작 전에 CAC 기준값을 정해 놓는다. 예: "CAC가 수임료의 30% 이하면 지속, 초과하면 중단 검토".</div>
+    </div>
+  </div>
+
+  <!-- 대표 보고용 핵심 메시지 -->
+  <div class="insight-box">
+    <div class="ib-label">💡 대표 보고 핵심 메시지</div>
+    <p style="margin-bottom:10px"><strong>위픽은 좋은 시도입니다.</strong> "성과가 날 때만 비용을 지불한다"는 구조는 기존 광고 방식의 가장 큰 불만을 해결하는 접근입니다.</p>
+    <p style="margin-bottom:10px">다만 위픽을 최대한 활용하려면 한 가지가 전제되어야 합니다. <strong>위픽 리드는 기존 상담과 다른 별도 퍼널로 관리</strong>해야 한다는 것입니다. 위픽 리드는 고객이 먼저 연락하는 인바운드가 아니라, 우리가 먼저 전화해야 하는 아웃바운드형 리드입니다. 응대 속도와 방식이 다르게 설계되어야 합니다.</p>
+    <p>따라서 제안 드리는 방향은 이것입니다. <strong>첫 계약은 소규모 테스트로 진행하되, 위픽 리드는 회사 차원의 별도 시트와 KPI로 관리</strong>합니다. 6주 후 연결률·수임전환율·CAC 데이터를 확인하고, 수치로 확대 여부를 결정합니다. 이 구조라면 위픽이 리얼로펌의 퍼널을 확장하는 강력한 도구가 될 수 있습니다.</p>
+  </div>
+
+</div><!-- /wp-wrap -->
+
+</div><!-- /strategy -->
+
+
+<div class="report-footer">
+  법무법인 리얼로펌 OPS팀 &nbsp;|&nbsp; 매주 월요일 오전 배포 &nbsp;|&nbsp; 데이터: 광고관리자 + 상담일지 + 수임계약 현황<br>
+  보고 기준일: 2026.04.27 (월) &nbsp;·&nbsp; 분석 기간: 04.20~04.24 &nbsp;·&nbsp; 4월 4주차
+</div>
+
+</div>
+
+<script>
+function switchTab(btn, id) {
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById("section-" + id).classList.add("active");
+}
+</script>
+</body>
+</html>
