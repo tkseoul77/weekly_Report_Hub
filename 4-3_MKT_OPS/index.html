@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>리얼로펌 주간 OPS 리포트 | 2026 4월 3주차</title>
+<style>
+:root {
+  --primary:  #0f2544;
+  --accent:   #d94f2b;
+  --accent2:  #f0a500;
+  --bg:       #f2ede6;
+  --card:     #ffffff;
+  --text:     #1a1a2e;
+  --muted:    #6b7280;
+  --border:   #ddd6cc;
+  --green:    #1a5c3a;
+  --danger:   #c62828;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:"Apple SD Gothic Neo","Malgun Gothic",sans-serif; background:var(--bg); color:var(--text); font-size:15px; line-height:1.7; }
+.wrap { max-width:1000px; margin:0 auto; padding:28px 20px 48px; }
+
+/* TOP HEADER */
+.top-header { background:var(--primary); border-radius:12px; padding:26px 32px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:20px; }
+.th-left { flex:1; }
+.brand { font-size:13px; color:#8892b0; letter-spacing:1.5px; margin-bottom:8px; }
+.th-left h1 { font-size:24px; font-weight:800; color:#fff; line-height:1.4; }
+.meta { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+.meta span { background:rgba(255,255,255,.1); color:#ccd6f6; font-size:13px; padding:4px 12px; border-radius:20px; }
+.report-badge { background:var(--accent); color:#fff; font-size:16px; font-weight:800; padding:12px 22px; border-radius:24px; white-space:nowrap; }
+.logo-box { width:80px; height:80px; background:#fff; border-radius:10px; overflow:hidden; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+.logo-box img { width:100%; height:100%; object-fit:contain; border-radius:8px; }
+
+/* TAB NAV */
+.tab-nav { display:flex; margin-bottom:24px; background:#fff; border-radius:10px; overflow:hidden; border:2px solid var(--border); }
+.tab-btn { flex:1; padding:15px 6px; text-align:center; font-size:13.5px; font-weight:700; color:var(--muted); cursor:pointer; border:none; background:transparent; transition:.18s; line-height:1.4; }
+.tab-btn.active { background:var(--primary); color:#fff; }
+.tab-btn.tab-strategy { border-right:2px solid var(--border); }
+.tab-btn.tab-strategy.active { background:#1a0a2e; }
+.tab-btn:hover:not(.active) { background:#f7f5f0; }
+
+/* SECTIONS */
+.section { display:none; }
+.section.active { display:block; }
+
+/* ── 전략 리포트 전용 스타일 ── */
+.strategy-intro {
+  background: linear-gradient(135deg, #0f2544 0%, #1a3a6e 100%);
+  border-radius: 12px;
+  padding: 32px 36px;
+  margin-bottom: 28px;
+  border-left: 6px solid var(--accent);
+  position: relative;
+  overflow: hidden;
+}
+.strategy-intro::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 180px; height: 180px;
+  background: rgba(217,79,43,.15);
+  border-radius: 50%;
+}
+.strategy-intro .s-badge {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+  letter-spacing: 1px;
+}
+.strategy-intro .s-headline {
+  font-size: 22px;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+.strategy-intro .s-headline em {
+  color: var(--accent2);
+  font-style: normal;
+}
+.strategy-intro .s-body {
+  font-size: 16px;
+  color: #ccd6f6;
+  line-height: 1.9;
+  font-weight: 500;
+}
+.strategy-intro .s-body strong {
+  color: #fff;
+  font-weight: 800;
+}
+
+/* 전략 섹션 제목 */
+.strategy-sec-title {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--primary);
+  padding: 12px 16px;
+  border-left: 5px solid var(--accent);
+  background: #fff;
+  border-radius: 0 8px 8px 0;
+  margin: 28px 0 14px;
+  box-shadow: 2px 2px 8px rgba(0,0,0,.06);
+}
+
+/* KPI GRID — 전략용 큰 버전 */
+.kpi-grid-strategy {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.kpi-card-strategy {
+  background: var(--card);
+  border-radius: 10px;
+  padding: 22px 18px;
+  text-align: center;
+  border: 2px solid var(--border);
+}
+.kpi-card-strategy.danger { border-color: var(--danger); background: #fff0ee; }
+.kpi-label-strategy {
+  font-size: 15px;
+  color: var(--muted);
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+.kpi-val-strategy {
+  font-size: 30px;
+  font-weight: 900;
+  color: var(--primary);
+  line-height: 1.2;
+}
+.kpi-card-strategy.danger .kpi-val-strategy { color: var(--danger); }
+.kpi-diff-strategy {
+  font-size: 14px;
+  margin-top: 8px;
+  font-weight: 700;
+}
+.kpi-diff-strategy.down { color: var(--danger); }
+.kpi-diff-strategy.flat { color: var(--muted); }
+
+/* ALERT */
+.alert-box { background:#fff0ee; border-left:5px solid var(--danger); border-radius:8px; padding:16px 20px; margin-bottom:22px; }
+.alert-title { font-size:18px; font-weight:800; color:var(--danger); margin-bottom:10px; }
+.alert-content { font-size:15px; color:#333; line-height:2.0; }
+
+/* KPI GRID — 일반 */
+.kpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:22px; }
+.kpi-card { background:var(--card); border-radius:10px; padding:18px 14px; text-align:center; border:2px solid var(--border); }
+.kpi-label { font-size:13px; color:var(--muted); font-weight:700; margin-bottom:7px; }
+.kpi-val { font-size:26px; font-weight:800; color:var(--primary); }
+.kpi-diff { font-size:13px; margin-top:6px; font-weight:600; }
+.kpi-diff.up { color:var(--green); }
+.kpi-diff.down { color:var(--danger); }
+.kpi-diff.flat { color:var(--muted); }
+
+/* FUNNEL */
+.funnel-row { display:flex; align-items:stretch; gap:6px; margin-bottom:12px; overflow-x:auto; }
+.f-card { flex:1; min-width:115px; background:var(--card); border-radius:10px; padding:16px 8px; text-align:center; border:2px solid var(--border); }
+.f-label { font-size:14px; color:var(--muted); font-weight:800; margin-bottom:6px; }
+.f-val { font-size:22px; font-weight:800; color:var(--primary); }
+.f-sub { font-size:12px; color:var(--muted); margin-top:5px; }
+.f-card.f-danger .f-val { color:var(--danger); }
+.f-card.f-danger .f-label { color:var(--danger); }
+.f-arrow { display:flex; align-items:center; color:#bbb; font-size:18px; flex-shrink:0; }
+.bottleneck { background:#fff8e1; border:2px solid var(--accent2); border-radius:8px; padding:14px 18px; margin-bottom:22px; font-size:15px; color:#7a5c00; line-height:1.85; }
+.bottleneck strong { color:#e65100; font-size:16px; }
+
+/* SEC TITLE */
+.sec-title { font-size:18px; font-weight:800; color:var(--primary); padding-left:12px; border-left:4px solid var(--accent); margin:24px 0 12px; }
+
+/* TABLE CARD */
+.table-card { background:var(--card); border-radius:10px; overflow:hidden; margin-bottom:18px; border:2px solid var(--border); }
+.table-card table { width:100%; border-collapse:collapse; }
+.table-card th { background:var(--primary); color:#fff; font-size:14px; font-weight:700; padding:12px; text-align:center; }
+.table-card td { padding:11px 12px; text-align:center; border-bottom:1px solid #f0ebe3; font-size:14px; }
+.table-card tr:last-child td { border-bottom:none; }
+.table-card tr.total-row td { font-weight:800; background:#f7f5f0; font-size:14px; }
+.table-card tr.warn-row td { background:#fff8f6; }
+.table-card tr.good-row td { background:#f0faf4; }
+.table-card tr.danger-row td { background:#fff0ee; }
+.table-card tr.neutral-row td { background:#f7f5f0; }
+.tag { display:inline-block; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:700; }
+.tag.red { background:#ffeaea; color:var(--danger); }
+.tag.green { background:#e8f5e9; color:var(--green); }
+.tag.yellow { background:#fff8e1; color:#e67e00; }
+.tag.gray { background:#f5f5f5; color:#666; }
+.tag.blue { background:#e3f2fd; color:#1565c0; }
+
+/* GRID-2 */
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:18px; }
+
+/* SUMMARY CARD */
+.summary-card { background:var(--card); border-radius:10px; padding:18px 20px; border:2px solid var(--border); }
+.summary-card .s-title { font-size:16px; font-weight:800; color:var(--primary); margin-bottom:12px; }
+.s-row { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #f0ebe3; font-size:14px; }
+.s-row:last-child { border-bottom:none; }
+.s-label { color:var(--muted); }
+.s-val { font-weight:700; }
+.s-val.bad { color:var(--danger); }
+.s-val.good { color:var(--green); }
+.s-val.warn { color:#e67e00; }
+
+/* INSIGHT GRID */
+.insight-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:18px; }
+.insight-card { background:var(--card); border-radius:10px; padding:18px; border-left:5px solid var(--accent2); }
+.insight-card.danger { border-left-color:var(--danger); }
+.insight-card.good   { border-left-color:var(--green); }
+.insight-card.warn   { border-left-color:#e67e00; }
+.insight-card.blue   { border-left-color:#1565c0; }
+.ic-title { font-size:16px; font-weight:800; color:var(--primary); margin-bottom:8px; }
+.ic-body { font-size:14px; color:#444; line-height:1.8; }
+
+/* ACTION BOX */
+.action-box { background:var(--primary); border-radius:10px; padding:20px 24px; margin-bottom:18px; }
+.action-item { display:flex; gap:14px; padding:12px 0; border-bottom:1px solid rgba(255,255,255,.1); align-items:flex-start; }
+.action-item:last-child { border-bottom:none; }
+.a-num { background:var(--accent); color:#fff; font-size:13px; font-weight:800; width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+.a-num.gold { background:var(--accent2); color:var(--primary); }
+.a-text { font-size:15px; color:#ccd6f6; line-height:1.8; }
+.a-text strong { color:#fff; font-size:15px; }
+
+/* BOX COMPONENTS */
+.pt-box     { border-left:5px solid #1565c0; background:#e3f2fd; padding:14px 18px; border-radius:7px; font-size:15px; color:#333; line-height:1.8; margin-bottom:14px; }
+.warn-box   { border-left:5px solid #e67e00; background:#fff3e0; padding:14px 18px; border-radius:7px; font-size:15px; color:#333; line-height:1.8; margin-bottom:14px; }
+.danger-box { border-left:5px solid var(--danger); background:#fff0ee; padding:14px 18px; border-radius:7px; font-size:15px; color:#333; line-height:1.8; margin-bottom:14px; }
+.good-box   { border-left:5px solid var(--green); background:#e8f5e9; padding:14px 18px; border-radius:7px; font-size:15px; color:#333; line-height:1.8; margin-bottom:14px; }
+.insight-box{ border-left:5px solid var(--accent2); background:#fff8e1; padding:14px 18px; border-radius:7px; font-size:15px; color:#333; line-height:1.8; margin-bottom:14px; }
+
+/* FOOTER */
+.report-footer { text-align:center; font-size:13px; color:#aaa; margin-top:32px; padding-top:16px; border-top:2px solid var(--border); }
+.up   { color:var(--green); font-weight:700; }
+.down { color:var(--danger); font-weight:700; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- TOP HEADER -->
+<div class="top-header">
+  <div class="logo-box"><img src="data:image/jpeg;base64,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" alt="리얼로펌 로고"></div>
+  <div class="th-left">
+    <div class="brand">법무법인 리얼로펌 · OPS 리포트</div>
+    <h1>주간 마케팅 &amp; 운영 통합 리포트<br>광고 효율 · 상담 퍼널 · 키워드 구조 진단</h1>
+    <div class="meta">
+      <span>📅 2026. 04 · 3주차</span>
+      <span>📊 주간 OPS</span>
+      <span>🏷 네이버 파워링크</span>
+      <span>📁 개인회생·파산·기업회생</span>
+      <span>🎯 퍼널 병목 &amp; 키워드 구조 진단</span>
+    </div>
+  </div>
+  <div class="report-badge">W3 APR</div>
+</div>
+
+<!-- TAB NAV — 전략 리포트 1번 -->
+<div class="tab-nav">
+  <button class="tab-btn tab-strategy active" onclick="switchTab(this,'strategy')">🔷 1. 전략 판단 리포트</button>
+  <button class="tab-btn" onclick="switchTab(this,'summary')">📊 2. 분석 요약</button>
+  <button class="tab-btn" onclick="switchTab(this,'data')">📈 3. 상세 DATA</button>
+  <button class="tab-btn" onclick="switchTab(this,'insight')">💡 4. 인사이트 · 액션</button>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     TAB 1 : 전략 판단 리포트
+══════════════════════════════════════ -->
+<div id="section-strategy" class="section active">
+
+  <!-- 강렬한 서두 선언 -->
+  <div class="strategy-intro">
+    <div class="s-badge">🚨 SPECIAL REPORT · 2026 W3</div>
+    <div class="s-headline">
+      현재 상황은 단순 효율 저하가 아니라<br>
+      <em>구조적 판단과 전환이 필요한 국면</em>입니다.
+    </div>
+    <div class="s-body">
+      따라서, 이번 주 리포트에는 특별히<br>
+      <strong>"방향 + 해석 + 행동 기준"</strong>에 대한 특별 페이지를 첫 페이지에 다루고자 합니다.
+    </div>
+  </div>
+
+  <!-- 1. 현재 상황 팩트 -->
+  <div class="strategy-sec-title">1. 현재 상황 요약 (팩트 기반)</div>
+  <div class="kpi-grid-strategy">
+    <div class="kpi-card-strategy danger">
+      <div class="kpi-label-strategy">CPL — 리드 1건당 비용</div>
+      <div class="kpi-val-strategy">176,000원</div>
+      <div class="kpi-diff-strategy down">전환 46건 기준 · 목표 100,000원 이하</div>
+    </div>
+    <div class="kpi-card-strategy danger">
+      <div class="kpi-label-strategy">CPA — 수임 1건당 비용</div>
+      <div class="kpi-val-strategy">400~800만원</div>
+      <div class="kpi-diff-strategy down">광고 기여 1~2건 추정 · 임계점 초과</div>
+    </div>
+    <div class="kpi-card-strategy danger">
+      <div class="kpi-label-strategy">퍼널 연결 상태</div>
+      <div class="kpi-val-strategy">구조 붕괴</div>
+      <div class="kpi-diff-strategy down">유입 → 상담 → 계약 연결 단절</div>
+    </div>
+  </div>
+
+  <div class="danger-box" style="font-size:16px; line-height:2.0; padding:18px 22px;">
+    🚨 <strong>가장 심각한 문제:</strong> 단순 효율 저하가 아닙니다.<br>
+    <strong style="font-size:17px;">"유입 → 상담 → 계약으로 이어지는 퍼널 연결이 끊어진 상태"</strong>입니다.<br>
+    클릭·전환(상담신청)은 발생하지만 실제 수임으로 이어지는 연결 고리가 데이터상 확인되지 않습니다.<br>
+    이는 채널의 문제가 아니라 <strong>마케팅 공급자의 역량 및 구조적 한계</strong>에서 기인하는 것으로 판단됩니다.
+  </div>
+
+  <!-- 2. 문제의 본질 -->
+  <div class="strategy-sec-title">2. 문제의 본질 — 채널 문제가 아닌 구조 문제</div>
+  <div class="insight-grid">
+    <div class="insight-card danger">
+      <div class="ic-title">❌ 기존 접근 방식 — 한계 도달</div>
+      <div class="ic-body">
+        소재 개선 → 랜딩 개선 → 광고 최적화 반복.<br>
+        현재는 <strong>"이미 맞지 않는 구조를 계속 튜닝하고 있는 상태"</strong>에 가깝습니다.<br><br>
+        튜닝으로 해결 가능한 문제가 아닙니다.
+      </div>
+    </div>
+    <div class="insight-card blue">
+      <div class="ic-title">✅ 지금 필요한 접근</div>
+      <div class="ic-body">
+        <strong>① 실패를 빠르게 인정</strong><br>
+        <strong>② 손실이 발생하는 구조를 즉시 축소</strong><br>
+        <strong>③ 대체 채널을 병행 테스트</strong><br><br>
+        핵심은 <strong>"정답을 찾는 것이 아니라,<br>틀린 선택을 빠르게 제거하는 것"</strong>입니다.
+      </div>
+    </div>
+  </div>
+  <div class="insight-box">
+    💡 <strong>추가 인사이트 — 계약 구조 문제:</strong> 현재 EN미디어와의 계약이 <strong>성과 기반(CPA)이 아니므로</strong>, 클릭과 전환이 발생해도 수임으로 연결되지 않는 구조에서 손실은 오직 광고주에게만 귀속됩니다.
+    <strong>정식 계약할 때, 최소 50%의 광고 대행료는 CPA 기반 성과형으로 지급한다는 조항 삽입을 요구해야 합니다.</strong>
+  </div>
+
+  <!-- 3. 현재 국면 -->
+  <div class="strategy-sec-title">3. 현재 국면 — '최적화'가 아니라 '전환'의 단계</div>
+  <div class="table-card">
+    <table>
+      <thead><tr><th>구분</th><th>최적화 단계</th><th>전환 단계 (현재 상황)</th></tr></thead>
+      <tbody>
+        <tr><td><strong>상황</strong></td><td>성과가 있지만 효율 개선 필요</td><td class="danger-row">성과 자체가 구조적으로 나오지 않음</td></tr>
+        <tr><td><strong>대응</strong></td><td>A/B테스트, 소재 교체, 입찰가 조정</td><td class="danger-row">채널·공급자·구조 자체를 재검토</td></tr>
+        <tr><td><strong>시간</strong></td><td>2~4주 개선 후 판단</td><td class="danger-row">즉시 손절 기준 설정 + 대안 병행</td></tr>
+        <tr><td><strong>핵심 질문</strong></td><td>"어떻게 더 잘 할 수 있나?"</td><td class="danger-row"><strong>"계속 해야 하나, 멈춰야 하나?"</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 4. 위픽부스터 -->
+  <div class="strategy-sec-title">4. 위픽부스터 — 객관적 포지셔닝</div>
+  <div class="table-card" style="margin-bottom:14px;">
+    <table>
+      <thead><tr><th>구분</th><th>일반 광고 대행 (EN미디어)</th><th>위픽부스터</th></tr></thead>
+      <tbody>
+        <tr><td><strong>광고비 구조</strong></td><td>광고비 + 운영 대행 수수료</td><td class="good-row">성과 발생 시만 비용 지불</td></tr>
+        <tr><td><strong>성과 보장</strong></td><td class="danger-row">X</td><td class="good-row">O (리드 기준)</td></tr>
+        <tr><td><strong>추가 비용</strong></td><td class="danger-row">소재·랜딩 제작 비용 별도</td><td class="good-row">소재·랜딩 무료 제작 지원</td></tr>
+        <tr><td><strong>광고 최적화</strong></td><td class="warn-row">지속 소통 요청 필요</td><td class="good-row">실시간 데이터 기반 자동 최적화</td></tr>
+        <tr><td><strong>수임 보장</strong></td><td class="danger-row">X</td><td class="danger-row">X (리드까지만 보장)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="insight-grid">
+    <div class="insight-card good">
+      <div class="ic-title">✅ 위픽부스터 기대 역할</div>
+      <div class="ic-body">
+        · 단기간 리드(상담신청) 확보<br>
+        · 상담량 유지 및 하방 방어<br>
+        · 성과 발생 시만 비용 → 손실 리스크 최소화<br>
+        · 소재·랜딩 무료 제작으로 초기 비용 절감
+      </div>
+    </div>
+    <div class="insight-card warn">
+      <div class="ic-title">⚠️ 위픽부스터 감안할 한계</div>
+      <div class="ic-body">
+        · 수임(계약) 성과는 보장하지 않음<br>
+        · 상담 전환율·품질은 내부에서 해결해야 할 문제<br>
+        · <strong>"완전한 근본 해결책"이 아닌<br>"유입 퍼널 단계의 보강 수단"</strong>으로 봐야 함
+      </div>
+    </div>
+  </div>
+  <div class="pt-box">
+    🔷 <strong>위픽부스터 도입 전 선행 조건:</strong>
+    위픽은 "상담 전환율 평균 30%"를 자사 성과로 제시합니다. 그러나 현재 리얼로펌 내부
+    <strong>상담→수임 전환율은 8.1%</strong>입니다.
+    위픽이 리드를 공급해도 내부 상담 전환 구조가 개선되지 않으면 동일한 결과가 반복됩니다.
+    <strong>위픽 도입 = 유입 문제 보강 / 상담 품질 = 내부가 반드시 해결해야 할 과제</strong>임을 명확히 인식해야 합니다.
+  </div>
+
+  <!-- 5. 핵심 KPI -->
+  <div class="strategy-sec-title">5. 채널 평가 공통 KPI 기준 (EN미디어·위픽 동일 적용)</div>
+  <div class="table-card">
+    <table>
+      <thead><tr><th>KPI 지표</th><th>현재 EN미디어</th><th>목표 기준</th><th>위픽부스터 예상</th></tr></thead>
+      <tbody>
+        <tr class="danger-row"><td><strong>리드 수 (주간)</strong></td><td>46건</td><td><strong style="color:var(--danger);">100건 이상</strong></td><td>성과 구매 수량 설정</td></tr>
+        <tr class="danger-row"><td><strong>CPL (리드당 비용)</strong></td><td>176,489원</td><td>100,000원 이하</td><td>건당 단가 협의</td></tr>
+        <tr class="danger-row"><td><strong>CPA (수임 1건당)</strong></td><td>400~800만원</td><td><strong style="color:var(--danger);">500,000원 이하</strong><br><span style="font-size:12px;color:var(--muted);">ROAS 400% 기준 · 일 광고비 200만원</span></td><td>내부 상담 전환율에 연동</td></tr>
+        <tr class="warn-row"><td><strong>상담 연결률</strong></td><td>측정 불가 (UTM 없음)</td><td>80% 이상</td><td>CRM 실시간 제공</td></tr>
+        <tr class="danger-row"><td><strong>리드→수임 전환율</strong></td><td>측정 불가</td><td><strong style="color:var(--danger);">15% 이상</strong><br><span style="font-size:12px;color:var(--muted);">리드 20건 → 최소 3건 계약</span></td><td>내부 역량에 달림</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="danger-box" style="font-size:16px; line-height:2.0;">
+    🚨 <strong>가장 중요한 평가 원칙:</strong>
+    <strong style="font-size:17px;">"리드가 아니라 수임(계약) 기준"</strong>으로 모든 채널을 평가해야 합니다.<br>
+    리드 수·CPL은 보조 지표이고, 최종 판단 기준은 항상 <strong>CPA(수임 1건당 비용)</strong>와 <strong>리드→수임 전환율</strong>이어야 합니다.
+  </div>
+
+  <!-- 6. 향후 운영 방향 -->
+  <div class="strategy-sec-title">6. 향후 운영 방향 (채널별 제안)</div>
+  <div class="action-box">
+    <div class="action-item">
+      <div class="a-num" style="background:#c62828; width:30px; height:30px; font-size:14px;">①</div>
+      <div class="a-text">
+        <strong>EN미디어 — 성과 기준 설정 후 축소/종료 검토</strong><br>
+        추가 개선 기대보다 <strong>명확한 성과 미달 기준(CPA 상한선)</strong>을 설정하고, 초과 시 예산 축소 또는 계약 종료를 검토합니다.
+        현재 계약 구조가 성과형이 아닌 경우, 다음 계약 갱신 시 <strong>CPA 기반 성과형 조항 삽입을 협상</strong>하는 것이 필수입니다.
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="a-num gold" style="width:30px; height:30px; font-size:14px;">②</div>
+      <div class="a-text">
+        <strong>위픽부스터 — 단기 테스트 채널로 병행 도입</strong><br>
+        4~6주 단기 테스트로 도입하고, <strong>EN미디어와 동일한 KPI(CPL·CPA·수임전환율)로 비교 평가</strong>합니다.
+        단, 도입 전 내부 상담 프로세스(리콜 관리·부재중 재연락·상담 품질)를 반드시 선행 정비해야 합니다.
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="a-num" style="width:30px; height:30px; font-size:14px;">③</div>
+      <div class="a-text">
+        <strong>내부 구조 정비 — 가장 시급하고 가장 중요한 과제</strong><br>
+        <strong>유입 → 상담 → 계약 데이터 연결(UTM 도입)</strong>이 없으면 어떤 채널을 써도 개선 판단이 불가능합니다.
+        현재 리콜 19건(추후관리 11 + 방문예정 8)은 <strong>이번 주가 골든타임</strong>입니다.
+        지금 당장 가장 큰 성과 레버는 들어온 리드에서 유효 리콜을 수임으로 전환하는 것입니다.
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. 결론 -->
+  <div class="strategy-sec-title">7. 결론 — 최우선 행동 기준</div>
+  <div class="insight-grid">
+    <div class="insight-card danger">
+      <div class="ic-title">🚨 지금 하지 말아야 할 것</div>
+      <div class="ic-body">
+        · 동일한 구조로 계속 튜닝하는 것<br>
+        · 채널만 바꾸고 내부 구조는 그대로 두는 것<br>
+        · 리드 수로만 성과를 판단하는 것<br>
+        · UTM 없이 채널 비교를 시도하는 것
+      </div>
+    </div>
+    <div class="insight-card good">
+      <div class="ic-title">✅ 지금 당장 해야 할 것</div>
+      <div class="ic-body">
+        · 빠른 실패 인정 + 손절 기준 설정<br>
+        · 리콜 19건 이번 주 전환 집중<br>
+        · UTM 도입으로 데이터 연결 구조 구축<br>
+        · 위픽부스터 단기 테스트 병행 시작<br>
+        · 모든 채널 동일 KPI (CPA) 기준 평가
+      </div>
+    </div>
+  </div>
+
+  <div class="strategy-intro" style="padding:24px 28px; margin-top:4px;">
+    <div class="s-badge">🔷 최종 판단 프레임</div>
+    <div class="s-body" style="font-size:15px;">
+      현재 상황은 특정 채널의 문제가 아니라 <strong>마케팅 공급자 및 구조 문제</strong>입니다.<br><br>
+      접근의 순서는 다음과 같습니다.<br>
+      <strong>① 내부 상담 전환 구조 점검</strong> (리콜 관리 · UTM 데이터 연결)<br>
+      <strong>② 채널 동일 기준 비교</strong> (EN미디어 vs 위픽 · CPA 기준)<br>
+      <strong>③ 성과 미달 채널 빠른 축소</strong><br>
+      <strong>④ 가장 빠른 수임 레버 = 지금 들어온 리콜 19건의 전환</strong><br><br>
+      <strong style="color:var(--accent2); font-size:16px;">"정답을 찾는 것이 아니라, 틀린 선택을 빠르게 제거하고 올바른 구조를 빠르게 검증하는 것"</strong><br>
+      이것이 현 시점 최선의 전략입니다.
+    </div>
+  </div>
+
+</div><!-- /section-strategy -->
+
+
+<!-- ══════════════════════════════════════
+     TAB 2 : 분석 요약
+══════════════════════════════════════ -->
+<div id="section-summary" class="section">
+
+  <div class="alert-box">
+    <div class="alert-title">🚨 이번 주 핵심 경보 (04.13~04.17)</div>
+    <div class="alert-content">
+      · 광고비 <strong>8,118,491원</strong> 집행 → 광고 직접 기여 수임 <strong>1~2건</strong> 추정 · 수임 1건당 광고비 <strong>약 400~800만원</strong><br>
+      · 클릭 263회 중 전환(상담신청) <strong>46건</strong> → 전환율 <strong>17.5%</strong> — 업계 평균 20~30% 근접, 지속 개선 필요<br>
+      · 키워드 87,400개 중 <strong>98.4%가 입찰가 70원</strong>(미노출) · 실운영 키워드 1,414개에 예산 집중<br>
+      · 기업회생 계열 키워드 <strong>입찰가 대비 CPC 최대 4.4배 초과</strong> — 자동입찰 설정 이상 가능성
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">주간 광고비</div>
+      <div class="kpi-val">811만원</div>
+      <div class="kpi-diff down">수임 1건당 400~800만원</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">클릭→전환율</div>
+      <div class="kpi-val">17.5%</div>
+      <div class="kpi-diff down">▼ 업계 평균 20~30% 하회</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">상담→수임율</div>
+      <div class="kpi-val">8.1%</div>
+      <div class="kpi-diff down">62건 상담 중 5건 수임</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">리콜 잠재건</div>
+      <div class="kpi-val">19건</div>
+      <div class="kpi-diff flat">추후관리 11 + 방문예정 8</div>
+    </div>
+  </div>
+
+  <div class="sec-title">퍼널 전체 흐름 — 광고비 → 노출 → 클릭 → 전환 → 상담일지 → 수임</div>
+  <div class="funnel-row">
+    <div class="f-card">
+      <div class="f-label">광고비 집행</div>
+      <div class="f-val">811만원</div>
+      <div class="f-sub">5일 합계</div>
+    </div>
+    <div class="f-arrow">▶</div>
+    <div class="f-card">
+      <div class="f-label">광고 노출</div>
+      <div class="f-val">18,072</div>
+      <div class="f-sub">회</div>
+    </div>
+    <div class="f-arrow">▶</div>
+    <div class="f-card">
+      <div class="f-label">클릭 유입</div>
+      <div class="f-val">263</div>
+      <div class="f-sub">CTR 1.46%</div>
+    </div>
+    <div class="f-arrow">▶</div>
+    <div class="f-card f-danger">
+      <div class="f-label">상담신청 전환</div>
+      <div class="f-val">46</div>
+      <div class="f-sub">전환율 17.5% ⚠</div>
+    </div>
+    <div class="f-arrow">▶</div>
+    <div class="f-card">
+      <div class="f-label">상담일지 DATA</div>
+      <div class="f-val">62</div>
+      <div class="f-sub">건 (일지 기준)</div>
+    </div>
+    <div class="f-arrow">▶</div>
+    <div class="f-card f-danger">
+      <div class="f-label">수임 완료</div>
+      <div class="f-val">5</div>
+      <div class="f-sub">수임율 8.1%</div>
+    </div>
+  </div>
+  <div class="bottleneck">
+    ⚠️ <strong>1차 병목 (클릭→전환):</strong> 263건 클릭 중 217건(82.5%) 랜딩에서 이탈 — 업계 평균 대비 전환율 개선 지속 필요<br>
+    ⚠️ <strong>2차 병목 (상담일지→수임):</strong> 62건 중 57건(91.9%) 미수임 — 리콜 19건 이번 주 관리 여부가 다음 주 성과를 결정
+  </div>
+
+  <div class="sec-title">상담 결과 분포 (상담일지 기준)</div>
+  <div class="grid-2">
+    <div class="table-card">
+      <table>
+        <thead><tr><th>결과 코드</th><th>건수</th><th>비율</th><th>분류</th></tr></thead>
+        <tbody>
+          <tr class="good-row"><td>수임완료</td><td><strong>5</strong></td><td>8.1%</td><td><span class="tag green">수임</span></td></tr>
+          <tr class="good-row"><td>추후관리 (리콜)</td><td><strong>11</strong></td><td>17.7%</td><td><span class="tag yellow">잠재 핵심</span></td></tr>
+          <tr class="good-row"><td>방문예정 (리콜)</td><td><strong>8</strong></td><td>12.9%</td><td><span class="tag yellow">잠재 핵심</span></td></tr>
+          <tr><td>진행미정</td><td>8</td><td>12.9%</td><td><span class="tag blue">관찰</span></td></tr>
+          <tr class="danger-row"><td>진행불가</td><td>9</td><td>14.5%</td><td><span class="tag red">이탈</span></td></tr>
+          <tr><td>단순문의</td><td>7</td><td>11.3%</td><td><span class="tag gray">허수</span></td></tr>
+          <tr class="warn-row"><td>부재중</td><td>7</td><td>11.3%</td><td><span class="tag red">누락위험</span></td></tr>
+          <tr><td>송무/상담대기/기타</td><td>7</td><td>11.3%</td><td><span class="tag gray">기타</span></td></tr>
+          <tr class="total-row"><td>합계</td><td>62</td><td>100%</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="summary-card">
+      <div class="s-title">📌 수임 5건 상세 &amp; 리콜 현황</div>
+      <div class="s-row"><span class="s-label">04.13 법인파산+개인파산</span><span class="s-val">2건 (동일업체)</span></div>
+      <div class="s-row"><span class="s-label">04.14 워크인</span><span class="s-val">1건</span></div>
+      <div class="s-row"><span class="s-label">04.16 비대면</span><span class="s-val">2건</span></div>
+      <div class="s-row"><span class="s-label">광고 직접 기여 추정</span><span class="s-val bad">1~2건</span></div>
+      <div class="s-row"><span class="s-label">워크인·자발 유입</span><span class="s-val">2~3건</span></div>
+      <div class="s-row"><span class="s-label">리콜 잠재건 합계</span><span class="s-val warn">19건</span></div>
+      <div class="s-row"><span class="s-label">— 추후관리 (리콜)</span><span class="s-val warn">11건</span></div>
+      <div class="s-row"><span class="s-label">— 방문예정 (리콜)</span><span class="s-val warn">8건</span></div>
+      <div class="s-row"><span class="s-label">부재중 미회수</span><span class="s-val bad">7건</span></div>
+      <div style="background:#fff8e1;border-radius:8px;padding:12px;margin-top:12px;font-size:14px;color:#7a5c00;line-height:1.8;">
+        ※ 수임 1건당 광고비: <strong>약 400~800만원</strong><br>
+        ※ 리콜 19건 → 이번 주 월~화 재연락이 다음 주 성과 결정
+      </div>
+    </div>
+  </div>
+
+</div><!-- /section-summary -->
+
+
+<!-- ══════════════════════════════════════
+     TAB 3 : 상세 DATA
+══════════════════════════════════════ -->
+<div id="section-data" class="section">
+
+  <div class="sec-title">일별 광고 성과 (네이버 파워링크)</div>
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr><th>날짜</th><th>노출수</th><th>클릭수</th><th>CTR</th><th>평균 CPC</th><th>총비용</th><th>전환수 (전환율)</th><th>전환당비용</th><th>비고</th></tr>
+      </thead>
+      <tbody>
+        <tr class="good-row">
+          <td>04.13 (월)</td><td>3,485</td><td>63</td><td>1.81%</td><td>30,567원</td><td>1,925,737원</td>
+          <td><strong>15</strong> <span style="color:var(--green);font-size:13px;font-weight:700;">(23.8%)</span></td>
+          <td>128,382원</td><td><span class="tag green">전환 최다</span></td>
+        </tr>
+        <tr>
+          <td>04.14 (화)</td><td>3,401</td><td>55</td><td>1.62%</td><td>28,912원</td><td>1,590,149원</td>
+          <td>9 <span style="color:var(--muted);font-size:13px;">(16.4%)</span></td>
+          <td>176,683원</td><td>—</td>
+        </tr>
+        <tr>
+          <td>04.15 (수)</td><td>3,417</td><td>56</td><td>1.64%</td><td>28,491원</td><td>1,595,503원</td>
+          <td>6 <span style="color:var(--muted);font-size:13px;">(10.7%)</span></td>
+          <td>265,917원</td><td>—</td>
+        </tr>
+        <tr>
+          <td>04.16 (목)</td><td>3,690</td><td>50</td><td>1.36%</td><td>34,478원</td><td>1,723,912원</td>
+          <td>8 <span style="color:var(--muted);font-size:13px;">(16.0%)</span></td>
+          <td>215,489원</td><td>—</td>
+        </tr>
+        <tr>
+          <td>04.17 (금)</td><td>4,079</td><td>39</td><td>0.96%</td><td>32,902원</td><td>1,283,190원</td>
+          <td>8 <span style="color:var(--muted);font-size:13px;">(20.5%)</span></td>
+          <td>160,399원</td><td>—</td>
+        </tr>
+        <tr class="total-row">
+          <td>합계</td><td>18,072</td><td>263</td><td>1.46%</td><td>30,870원</td><td>8,118,491원</td>
+          <td><strong>46</strong> <span style="color:var(--green);font-size:13px;font-weight:700;">(17.5%)</span></td>
+          <td>176,489원</td><td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="warn-box">⚠️ <strong>CTR 추이:</strong> 월요일 1.81% → 금요일 0.96%로 주 후반 소폭 하락. 소재 피로도 또는 경쟁 심화 가능성 — 다음 주 소재 교체 및 키워드 재검토 권장.</div>
+
+  <div class="sec-title">일별 상담 현황 (상담일지 기준)</div>
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr><th>날짜</th><th>전체 상담</th><th>수임완료</th><th>추후관리<br>(리콜)</th><th>방문예정<br>(리콜)</th><th>리콜 소계</th><th>진행미정</th><th>진행불가</th><th>부재중</th><th>수임전환율</th></tr>
+      </thead>
+      <tbody>
+        <tr class="good-row">
+          <td>04.13 (월)</td><td>16</td><td><strong>2</strong></td><td>1</td><td>1</td><td><span class="up">2</span></td><td>2</td><td>3</td><td>1</td><td><span class="up">12.5%</span></td>
+        </tr>
+        <tr>
+          <td>04.14 (화)</td><td>12</td><td><strong>1</strong></td><td>4</td><td>1</td><td><span class="up">5</span></td><td>3</td><td>1</td><td>2</td><td>8.3%</td>
+        </tr>
+        <tr class="danger-row">
+          <td>04.15 (수)</td><td>9</td><td><strong>0</strong></td><td>2</td><td>1</td><td><span class="up">3</span></td><td>1</td><td>1</td><td>1</td><td><span class="down">0%</span></td>
+        </tr>
+        <tr class="good-row">
+          <td>04.16 (목)</td><td>11</td><td><strong>2</strong></td><td>2</td><td>1</td><td><span class="up">3</span></td><td>1</td><td>1</td><td>2</td><td><span class="up">18.2%</span></td>
+        </tr>
+        <tr>
+          <td>04.17 (금)</td><td>14</td><td><strong>0</strong></td><td>2</td><td>4</td><td><span class="up">6</span></td><td>1</td><td>3</td><td>1</td><td><span class="down">0%</span></td>
+        </tr>
+        <tr class="total-row">
+          <td>합계</td><td>62</td><td><strong>5</strong></td><td><strong>11</strong></td><td><strong>8</strong></td><td><strong class="up">19</strong></td><td>8</td><td>9</td><td>7</td><td>8.1%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="good-box">✅ <strong>리콜 잠재건 19건 (추후관리 11건 + 방문예정 8건):</strong> 이번 주 수임 전환 여부가 다음 주 성과를 직접 결정. 04.17(금) 방문예정 4건 집중 — 이번 주 월~화 우선 재연락 필요.</div>
+
+  <div class="sec-title">키워드 세팅 구조 진단 (CSV 87,400개 전수 분석)</div>
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr><th>입찰가 구간</th><th>키워드 수</th><th>비율</th><th>상태 판정</th></tr>
+      </thead>
+      <tbody>
+        <tr class="danger-row"><td>~70원 (최저가)</td><td>85,986</td><td><span class="down">98.4%</span></td><td><span class="tag red">사실상 미노출 — 숫자 부풀리기 가능성</span></td></tr>
+        <tr><td>1,001~5,000원</td><td>4</td><td>0.0%</td><td><span class="tag gray">소량</span></td></tr>
+        <tr><td>5,001~10,000원</td><td>623</td><td>0.7%</td><td><span class="tag blue">일반 운영</span></td></tr>
+        <tr><td>10,001~30,000원</td><td>336</td><td>0.4%</td><td><span class="tag yellow">중간 입찰</span></td></tr>
+        <tr class="warn-row"><td>30,001~70,000원</td><td>451</td><td>0.5%</td><td><span class="tag red">고입찰 — 전환 검증 필요</span></td></tr>
+        <tr class="total-row"><td>합계</td><td>87,400</td><td>100%</td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="danger-box">🚨 <strong>구조적 문제:</strong> 87,400개 키워드 중 85,986개(98.4%)가 입찰가 70원으로 사실상 미노출. 실운영 1,414개 집중 관리 체계 전환 권고.</div>
+
+  <div class="sec-title">핵심 키워드 성과 비교 (04.16 데일리 × CSV 교차분석)</div>
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr><th>키워드</th><th>설정 입찰가</th><th>실제 CPC</th><th>입찰가 대비</th><th>전환수</th><th>판정</th></tr>
+      </thead>
+      <tbody>
+        <tr class="good-row"><td>부산저작권변호사</td><td>70원</td><td>6,266원</td><td class="down">89배 ⚠</td><td><span class="up">2건</span></td><td><span class="tag green">최우수 효율</span></td></tr>
+        <tr class="good-row"><td>대구개인회생무료상담</td><td>30,000원</td><td>23,448원</td><td>0.78배</td><td><span class="up">1건</span></td><td><span class="tag green">효율 우수</span></td></tr>
+        <tr class="good-row"><td>개인파산신청방법</td><td>57,070원</td><td>49,266원</td><td>0.86배</td><td><span class="up">1건</span></td><td><span class="tag green">전환 발생</span></td></tr>
+        <tr class="danger-row"><td>기업회생</td><td>55,000원</td><td>105,261원</td><td><strong class="down">1.91배 🚨</strong></td><td><span class="down">0</span></td><td><span class="tag red">초과 과금 + 무전환</span></td></tr>
+        <tr class="danger-row"><td>기업회생신청</td><td>50,000원</td><td>94,143원</td><td><strong class="down">1.88배 🚨</strong></td><td><span class="down">0</span></td><td><span class="tag red">초과 과금 + 무전환</span></td></tr>
+        <tr class="danger-row"><td>대구개인회생 (13~14시)</td><td>20,000원</td><td>87,969원</td><td><strong class="down">4.4배 🚨</strong></td><td><span class="down">0</span></td><td><span class="tag red">가장 심각한 초과</span></td></tr>
+        <tr class="danger-row"><td>개인회생 (09~10시)</td><td>50,000원</td><td>47,160원</td><td>0.94배</td><td><span class="down">0</span></td><td><span class="tag red">최다 비용 소진 141,479원</span></td></tr>
+        <tr class="warn-row"><td>개인회생신청자격</td><td>50,410원</td><td>77,111원</td><td class="down">1.53배 ⚠</td><td>1건</td><td><span class="tag yellow">전환 있으나 CPC 초과</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="danger-box">🚨 <strong>입찰가 초과 과금 이상 신호:</strong> 기업회생(1.91배), 대구개인회생(4.4배) 등 다수 키워드에서 이상 감지. 이앤미디어에 자동입찰·스마트채널 설정 원본 데이터 확인 요청 필요.</div>
+
+</div><!-- /section-data -->
+
+
+<!-- ══════════════════════════════════════
+     TAB 4 : 인사이트 · 액션
+══════════════════════════════════════ -->
+<div id="section-insight" class="section">
+
+  <div class="sec-title">이번 주 핵심 인사이트</div>
+  <div class="insight-grid">
+    <div class="insight-card danger">
+      <div class="ic-title">🚨 광고비 효율 임계점 도달</div>
+      <div class="ic-body">811만원 집행 대비 광고 직접 수임 1~2건. 수임 1건당 광고비 400~800만원은 법무 서비스 수임료 대비 수익성 적자 가능성. 키워드 구조 전면 재조정 없이는 동일 패턴 반복.</div>
+    </div>
+    <div class="insight-card danger">
+      <div class="ic-title">🚨 입찰가 초과 과금 — 즉시 확인</div>
+      <div class="ic-body">기업회생 계열에서 설정 입찰가의 1.9~4.4배 CPC 발생. 자동입찰·확장 매칭 활성화 여부 대행사 원본 데이터 확인 필수.</div>
+    </div>
+    <div class="insight-card good">
+      <div class="ic-title">✅ 지역 특화 키워드만 전환 발생</div>
+      <div class="ic-body">부산저작권변호사(CPC 6,266원·전환 2건), 대구개인회생무료상담(CPC 23,448원·전환 1건) 압도적 효율. 광역 키워드는 고CPC·무전환. 예산 재배분 방향 명확.</div>
+    </div>
+    <div class="insight-card warn">
+      <div class="ic-title">⚠️ 리콜 19건 — 이번 주가 골든타임</div>
+      <div class="ic-body">추후관리 11건 + 방문예정 8건(총 19건). 특히 04.17 방문예정 4건 집중. 상담 후 72시간 이내 재연락이 수임 전환의 핵심 변수. 이번 주 월~화 전체 재연락 완료 여부가 다음 주 수임 건수를 직접 결정.</div>
+    </div>
+    <div class="insight-card warn">
+      <div class="ic-title">⚠️ 부재중 7건 미회수</div>
+      <div class="ic-body">부재중 발생 후 재연락 여부 데이터 없음. 상담 신청 후 연락 불가 건은 잠재 수임 누락으로 직결. 당일 재연락 기준(최소 3회 시도) 프로세스 정립 필요.</div>
+    </div>
+    <div class="insight-card blue">
+      <div class="ic-title">🔵 광고-상담 데이터 연결 구조 부재</div>
+      <div class="ic-body">광고 전환 46건과 상담일지 62건 간 매칭 불가. 어떤 키워드가 실제 수임으로 이어졌는지 추적 불가. UTM 파라미터 도입이 다음 단계 광고비 최적화의 전제 조건.</div>
+    </div>
+  </div>
+
+  <div class="sec-title">다음 주 액션플랜 (04.20~04.26)</div>
+  <div class="action-box">
+    <div class="action-item">
+      <div class="a-num">1</div>
+      <div class="a-text"><strong>[즉시 · 월~화] 리콜 19건 전체 재연락</strong><br>추후관리 11건 + 방문예정 8건 + 부재중 7건 포함 재연락. 결과(수임/이탈/재예약)를 OPS 시트에 기록. 04.17 방문예정 4건 최우선.</div>
+    </div>
+    <div class="action-item">
+      <div class="a-num">2</div>
+      <div class="a-text"><strong>[이번 주] 이앤미디어 — 입찰가 초과 과금 원인 확인</strong><br>기업회생(55,000원 → CPC 105,261원), 대구개인회생(20,000원 → CPC 87,969원) 자동입찰·스마트채널·확장매칭 설정 원본 확인 및 자동 확장 OFF 요청.</div>
+    </div>
+    <div class="action-item">
+      <div class="a-num">3</div>
+      <div class="a-text"><strong>[이번 주] 무전환 고비용 키워드 입찰가 하향</strong><br>개인회생(141,479원·전환0), 기업회생(105,261원·전환0) → 입찰가 50% 이상 하향 또는 일시 중지 요청.</div>
+    </div>
+    <div class="action-item">
+      <div class="a-num gold">4</div>
+      <div class="a-text"><strong>[이번 주] 효율 키워드 예산 확대</strong><br>부산저작권변호사, 대구개인회생무료상담 입찰가 상향. 지역+무료상담 조합 신규 키워드 발굴 요청.</div>
+    </div>
+    <div class="action-item">
+      <div class="a-num">5</div>
+      <div class="a-text"><strong>[다음 주] UTM 유입경로 추적 도입</strong><br>광고 클릭 → 상담일지 매칭을 위한 UTM 파라미터 또는 유입코드 도입. 다음 주 OPS 리포트부터 적용 목표.</div>
+    </div>
+    <div class="action-item">
+      <div class="a-num">6</div>
+      <div class="a-text"><strong>[프로세스] 부재중 당일 재연락 기준 수립</strong><br>부재중 발생 시 최소 3회 재시도(30분 간격) 후 문자 발송 프로세스 정립. 다음 주부터 OPS 시트에 재연락 이력 기록.</div>
+    </div>
+  </div>
+
+  <div class="sec-title">다음 캠페인 방향</div>
+  <div class="insight-box">
+    💡 <strong>핵심 전략 전환 방향:</strong> 광역 키워드(개인회생·기업회생·파산) 예산 → <strong>지역 + 서비스 + 무료상담 조합 키워드</strong>로 재배분. 현재 데이터상 이 패턴이 CPA 기준 5~10배 이상 효율적. 실운영 1,414개 키워드 집중 관리 체계로 전환 권고.
+  </div>
+  <div class="pt-box">
+    📋 <strong>다음 주 OPS 리포트 추가 항목 예고:</strong> ① 리콜 19건 전환 결과 추적 ② UTM 도입 현황 ③ 입찰가 재조정 후 CPC 변화 ④ 4주차 vs 3주차 주차별 비교
+  </div>
+
+</div><!-- /section-insight -->
+
+<div class="report-footer">
+  법무법인 리얼로펌 OPS팀 &nbsp;|&nbsp; 매주 월요일 오전 배포 &nbsp;|&nbsp; 데이터: 광고관리자 + 상담일지 + 키워드 CSV 87,400개<br>
+  보고 기준일: 2026.04.19 (월) &nbsp;·&nbsp; 분석 기간: 04.13~04.17 &nbsp;·&nbsp; 4월 3주차
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+function switchTab(btn, id) {
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById("section-" + id).classList.add("active");
+}
+</script>
+</body>
+</html>
