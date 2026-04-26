@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>리얼로펌 마케팅 OPS 허브</title>
+<title>리얼로펌 주간 OPS 허브</title>
 <style>
 :root {
   --primary:  #0f2544;
@@ -33,8 +33,9 @@ body { font-family:"Apple SD Gothic Neo","Malgun Gothic",sans-serif; background:
   gap:24px;
 }
 .hh-left { flex:1; }
-.hh-brand { font-size:12px; color:#8892b0; letter-spacing:2px; text-transform:uppercase; margin-bottom:8px; }
+.hh-brand { font-size:12px; color:#ccd6f6; letter-spacing:2px; text-transform:uppercase; margin-bottom:8px; font-weight:700; }
 .hh-title { font-size:26px; font-weight:900; color:#fff; line-height:1.35; margin-bottom:12px; }
+.hh-title span { color:var(--accent2); }
 .hh-meta { display:flex; gap:8px; flex-wrap:wrap; }
 .hh-meta span { background:rgba(255,255,255,.1); color:#ccd6f6; font-size:12px; padding:3px 12px; border-radius:20px; }
 .hub-badge {
@@ -55,164 +56,55 @@ body { font-family:"Apple SD Gothic Neo","Malgun Gothic",sans-serif; background:
 .stat-bar {
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:12px;
+  gap:14px;
   margin-bottom:32px;
 }
 .stat-card {
   background:var(--card);
-  border-radius:10px;
-  padding:18px 16px;
+  border-radius:12px;
+  padding:22px 18px;
   text-align:center;
   border:2px solid var(--border);
 }
-.stat-label { font-size:12px; color:var(--muted); font-weight:700; margin-bottom:6px; letter-spacing:.5px; }
-.stat-val { font-size:28px; font-weight:900; color:var(--primary); }
-.stat-sub { font-size:12px; color:var(--muted); margin-top:4px; }
-.stat-card.green { border-color:var(--green); }
+.stat-label {
+  font-size:14px;
+  color:var(--muted);
+  font-weight:800;
+  margin-bottom:10px;
+  letter-spacing:.3px;
+}
+.stat-val {
+  font-size:32px;
+  font-weight:900;
+  color:var(--primary);
+  line-height:1.1;
+  margin-bottom:8px;
+}
+.stat-sub {
+  font-size:13px;
+  color:var(--muted);
+  font-weight:600;
+  line-height:1.5;
+}
+.stat-card.green { border-color:var(--green); background:#f0faf4; }
+.stat-card.green .stat-label { color:var(--green); }
 .stat-card.green .stat-val { color:var(--green); }
+.stat-card.accent { border-color:var(--accent2); background:#fffbf0; }
+.stat-card.accent .stat-label { color:#b07800; }
+.stat-card.accent .stat-val { color:#b07800; }
+.stat-card.navy { border-color:var(--primary); background:#f0f2f8; }
+.stat-card.navy .stat-label { color:var(--primary); }
+.stat-card.navy .stat-val { color:var(--primary); }
 
 /* ── SECTION TITLE ── */
 .sec-title {
-  font-size:17px;
+  font-size:18px;
   font-weight:800;
   color:var(--primary);
-  padding-left:12px;
-  border-left:4px solid var(--accent);
-  margin:32px 0 16px;
+  padding-left:14px;
+  border-left:5px solid var(--accent);
+  margin:36px 0 16px;
 }
-
-/* ── REPORT GRID ── */
-.report-grid {
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:18px;
-  margin-bottom:10px;
-}
-
-/* ── REPORT CARD ── */
-.report-card {
-  background:var(--card);
-  border-radius:12px;
-  border:2px solid var(--border);
-  overflow:hidden;
-  transition:box-shadow .2s, transform .15s;
-  text-decoration:none;
-  color:inherit;
-  display:block;
-}
-.report-card:hover {
-  box-shadow:0 8px 28px rgba(15,37,68,.12);
-  transform:translateY(-2px);
-}
-.rc-header {
-  background:var(--primary);
-  padding:18px 22px;
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-}
-.rc-week { font-size:11px; color:#8892b0; letter-spacing:1.5px; margin-bottom:5px; }
-.rc-title { font-size:17px; font-weight:800; color:#fff; line-height:1.35; }
-.rc-badge {
-  font-size:12px;
-  font-weight:800;
-  padding:5px 12px;
-  border-radius:20px;
-  white-space:nowrap;
-  flex-shrink:0;
-  margin-left:10px;
-  margin-top:2px;
-}
-.rc-badge.red { background:var(--accent); color:#fff; }
-.rc-badge.green { background:var(--green); color:#fff; }
-.rc-badge.gold { background:var(--accent2); color:var(--primary); }
-.rc-badge.coming { background:rgba(255,255,255,.15); color:#8892b0; }
-
-.rc-body { padding:18px 22px; }
-.rc-period { font-size:12px; color:var(--muted); margin-bottom:14px; font-weight:600; }
-
-.rc-kpi {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
-  margin-bottom:14px;
-}
-.rck {
-  background:#f7f5f0;
-  border-radius:8px;
-  padding:10px 8px;
-  text-align:center;
-}
-.rck-label { font-size:10px; color:var(--muted); font-weight:700; margin-bottom:4px; }
-.rck-val { font-size:16px; font-weight:800; color:var(--primary); }
-.rck.good .rck-val { color:var(--green); }
-.rck.warn .rck-val { color:#e67e00; }
-.rck.danger .rck-val { color:var(--danger); }
-
-.rc-tags { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:16px; }
-.rc-tag { font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; }
-.rc-tag.green { background:#e8f5e9; color:var(--green); }
-.rc-tag.red { background:#ffeaea; color:var(--danger); }
-.rc-tag.yellow { background:#fff8e1; color:#e67e00; }
-.rc-tag.blue { background:#e3f2fd; color:#1565c0; }
-.rc-tag.gray { background:#f5f5f5; color:#666; }
-
-.rc-btn {
-  display:block;
-  width:100%;
-  padding:12px;
-  background:var(--primary);
-  color:#fff;
-  text-align:center;
-  font-size:14px;
-  font-weight:700;
-  border-radius:8px;
-  text-decoration:none;
-  transition:background .15s;
-}
-.rc-btn:hover { background:#1a3a6e; }
-.rc-btn.coming {
-  background:#f7f5f0;
-  color:var(--muted);
-  cursor:default;
-}
-
-/* ── COMING SOON ── */
-.report-card.coming {
-  border-style:dashed;
-  border-color:#ccc;
-  opacity:.7;
-}
-.report-card.coming .rc-header {
-  background:#e8e3db;
-}
-.report-card.coming .rc-title { color:#999; }
-
-/* ── KPI GUIDE BOX ── */
-.kpi-guide {
-  background:var(--card);
-  border-radius:12px;
-  border:2px solid var(--border);
-  padding:22px 26px;
-  margin-bottom:18px;
-}
-.kg-title { font-size:16px; font-weight:800; color:var(--primary); margin-bottom:14px; }
-.kg-grid {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-}
-.kg-item {
-  background:#f7f5f0;
-  border-radius:8px;
-  padding:12px 14px;
-  border-left:4px solid var(--accent);
-}
-.kg-item.green { border-left-color:var(--green); }
-.kg-item.warn { border-left-color:#e67e00; }
-.kg-label { font-size:12px; color:var(--muted); font-weight:700; margin-bottom:4px; }
-.kg-val { font-size:15px; font-weight:800; color:var(--primary); }
-.kg-note { font-size:11px; color:var(--muted); margin-top:3px; }
 
 /* ── TREND TABLE ── */
 .trend-table-wrap {
@@ -223,19 +115,204 @@ body { font-family:"Apple SD Gothic Neo","Malgun Gothic",sans-serif; background:
   margin-bottom:18px;
 }
 .trend-table-wrap table { width:100%; border-collapse:collapse; }
-.trend-table-wrap th { background:var(--primary); color:#fff; font-size:13px; font-weight:700; padding:11px 14px; text-align:center; }
-.trend-table-wrap td { padding:11px 14px; text-align:center; border-bottom:1px solid #f0ebe3; font-size:14px; }
+.trend-table-wrap th {
+  background:var(--primary);
+  color:#fff;
+  font-size:13px;
+  font-weight:700;
+  padding:13px 12px;
+  text-align:center;
+  line-height:1.4;
+}
+.trend-table-wrap td {
+  padding:13px 12px;
+  text-align:center;
+  border-bottom:1px solid #f0ebe3;
+  font-size:14px;
+  font-weight:600;
+}
 .trend-table-wrap tr:last-child td { border-bottom:none; font-weight:800; background:#f7f5f0; }
 .up { color:var(--green); font-weight:700; }
 .down { color:var(--danger); font-weight:700; }
 
+/* ── KPI GUIDE ── */
+.kpi-guide {
+  background:var(--card);
+  border-radius:12px;
+  border:2px solid var(--border);
+  padding:24px 28px;
+  margin-bottom:18px;
+}
+.kg-title { font-size:16px; font-weight:800; color:var(--primary); margin-bottom:16px; }
+.kg-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+.kg-item {
+  background:#f7f5f0;
+  border-radius:8px;
+  padding:14px 16px;
+  border-left:4px solid var(--accent);
+}
+.kg-item.green { border-left-color:var(--green); }
+.kg-item.warn { border-left-color:#e67e00; }
+.kg-label { font-size:12px; color:var(--muted); font-weight:700; margin-bottom:5px; }
+.kg-val { font-size:16px; font-weight:800; color:var(--primary); }
+.kg-note { font-size:12px; color:var(--muted); margin-top:4px; line-height:1.4; }
+
+/* ── REPORT GRID ── */
+.report-grid {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:20px;
+  margin-bottom:10px;
+}
+
+/* ── REPORT CARD ── */
+.report-card {
+  background:var(--card);
+  border-radius:14px;
+  border:2px solid var(--border);
+  overflow:hidden;
+  transition:box-shadow .2s, transform .15s;
+  display:block;
+  text-decoration:none;
+  color:inherit;
+}
+.report-card:hover {
+  box-shadow:0 10px 32px rgba(15,37,68,.14);
+  transform:translateY(-3px);
+}
+.rc-header {
+  padding:20px 24px 18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+}
+.rc-header.danger { background:linear-gradient(135deg,#0f2544,#2a1a3e); }
+.rc-header.success { background:linear-gradient(135deg,#0f2544,#0f3d1e); }
+.rc-header.coming { background:#e8e3db; }
+
+.rc-week {
+  font-size:13px;
+  font-weight:800;
+  color:#fff;
+  margin-bottom:6px;
+  letter-spacing:.5px;
+}
+.rc-header.coming .rc-week { color:#999; }
+.rc-title {
+  font-size:17px;
+  font-weight:900;
+  color:#fff;
+  line-height:1.4;
+}
+.rc-header.coming .rc-title { color:#999; }
+
+.rc-badge {
+  font-size:13px;
+  font-weight:800;
+  padding:6px 14px;
+  border-radius:20px;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.rc-badge.red { background:var(--accent); color:#fff; }
+.rc-badge.green { background:var(--green); color:#fff; }
+.rc-badge.coming { background:rgba(0,0,0,.1); color:#999; }
+
+.rc-body { padding:20px 24px; }
+.rc-period {
+  font-size:13px;
+  color:var(--muted);
+  margin-bottom:16px;
+  font-weight:600;
+}
+
+.rc-kpi {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-bottom:16px;
+}
+.rck {
+  background:#f7f5f0;
+  border-radius:8px;
+  padding:11px 8px;
+  text-align:center;
+}
+.rck-label { font-size:11px; color:var(--muted); font-weight:700; margin-bottom:4px; }
+.rck-val { font-size:17px; font-weight:800; color:var(--primary); }
+.rck.good { background:#e8f5e9; }
+.rck.good .rck-val { color:var(--green); }
+.rck.warn { background:#fff8e1; }
+.rck.warn .rck-val { color:#c07000; }
+.rck.danger { background:#fff0ee; }
+.rck.danger .rck-val { color:var(--danger); }
+
+.rc-tags { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:18px; }
+.rc-tag { font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; }
+.rc-tag.green { background:#e8f5e9; color:var(--green); }
+.rc-tag.red { background:#ffeaea; color:var(--danger); }
+.rc-tag.yellow { background:#fff8e1; color:#c07000; }
+.rc-tag.blue { background:#e3f2fd; color:#1565c0; }
+.rc-tag.gray { background:#f5f5f5; color:#666; }
+
+/* ── CTA BUTTON ── */
+.rc-btn {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  width:100%;
+  padding:15px;
+  background:var(--primary);
+  color:#fff;
+  text-align:center;
+  font-size:15px;
+  font-weight:800;
+  border-radius:10px;
+  text-decoration:none;
+  transition:background .15s, transform .1s;
+  letter-spacing:.3px;
+}
+.rc-btn:hover {
+  background:var(--accent);
+  transform:scale(1.01);
+}
+.rc-btn .arrow {
+  font-size:18px;
+  transition:transform .15s;
+}
+.rc-btn:hover .arrow {
+  transform:translateX(4px);
+}
+.rc-btn.coming {
+  background:#f0ece6;
+  color:#aaa;
+  cursor:default;
+  font-weight:700;
+}
+.rc-btn.coming:hover {
+  background:#f0ece6;
+  transform:none;
+}
+
+/* ── COMING SOON ── */
+.report-card.coming {
+  border-style:dashed;
+  opacity:.75;
+}
+
 /* FOOTER */
 .hub-footer {
   text-align:center;
-  font-size:12px;
+  font-size:13px;
   color:#aaa;
-  margin-top:40px;
-  padding-top:18px;
+  margin-top:44px;
+  padding-top:20px;
   border-top:2px solid var(--border);
 }
 </style>
@@ -248,7 +325,7 @@ body { font-family:"Apple SD Gothic Neo","Malgun Gothic",sans-serif; background:
   <div class="logo-box"><img src="data:image/jpeg;base64,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" alt="리얼로펌 로고"></div>
   <div class="hh-left">
     <div class="hh-brand">법무법인 리얼로펌 · 마케팅 OPS 허브</div>
-    <div class="hh-title">주간 마케팅 &amp; 운영 통합 리포트<br>아카이브 &amp; 성과 트래킹</div>
+    <div class="hh-title">[마케팅-상담-운영] <span>Weekly Report</span></div>
     <div class="hh-meta">
       <span>📅 2026. 04~</span>
       <span>📊 주간 OPS</span>
@@ -262,38 +339,49 @@ body { font-family:"Apple SD Gothic Neo","Malgun Gothic",sans-serif; background:
 
 <!-- STAT BAR -->
 <div class="stat-bar">
-  <div class="stat-card">
+  <div class="stat-card navy">
     <div class="stat-label">발행 리포트</div>
-    <div class="stat-val">2</div>
+    <div class="stat-val">2건</div>
     <div class="stat-sub">3주차 · 4주차</div>
   </div>
   <div class="stat-card green">
-    <div class="stat-label">누적 수임 건수</div>
+    <div class="stat-label">누적 수임</div>
     <div class="stat-val">17건</div>
-    <div class="stat-sub">3주차 5건 + 4주차 12건</div>
+    <div class="stat-sub" style="text-align:left;padding-left:8px;">3주차 5건<br>4주차 12건</div>
   </div>
-  <div class="stat-card">
+  <div class="stat-card navy">
     <div class="stat-label">누적 광고비</div>
     <div class="stat-val">1,551만</div>
-    <div class="stat-sub">811만 + 740만</div>
+    <div class="stat-sub" style="text-align:left;padding-left:8px;">3주차 811만<br>4주차 740만</div>
   </div>
-  <div class="stat-card green">
+  <div class="stat-card accent">
     <div class="stat-label">4주차 ROAS</div>
     <div class="stat-val">468%</div>
-    <div class="stat-sub">목표 400% ✅ 초과</div>
+    <div class="stat-sub">목표 500% 대비<br>32p 격차</div>
   </div>
 </div>
 
 <!-- 주차별 트렌드 -->
-<div class="sec-title">📈 주차별 성과 트렌드</div>
+<div class="sec-title">📈 주간 성과 트렌드</div>
 <div class="trend-table-wrap">
   <table>
     <thead>
-      <tr><th>주차</th><th>기간</th><th>광고비</th><th>전환율</th><th>CPL</th><th>수임건수</th><th>수임율</th><th>CPA</th><th>ROAS</th><th>리콜</th></tr>
+      <tr>
+        <th>주차</th>
+        <th>기간</th>
+        <th>광고비</th>
+        <th>전환율</th>
+        <th>CPL</th>
+        <th>수임<br>건수</th>
+        <th>수임율</th>
+        <th>CPA</th>
+        <th>ROAS</th>
+        <th>리콜</th>
+      </tr>
     </thead>
     <tbody>
       <tr>
-        <td><strong>3주차</strong></td>
+        <td><strong>3rd</strong></td>
         <td>04.13~04.17</td>
         <td>8,118,491원</td>
         <td><span class="down">17.5%</span></td>
@@ -305,7 +393,7 @@ body { font-family:"Apple SD Gothic Neo","Malgun Gothic",sans-serif; background:
         <td>19건</td>
       </tr>
       <tr>
-        <td><strong>4주차</strong></td>
+        <td><strong>4th</strong></td>
         <td>04.20~04.24</td>
         <td>7,398,073원</td>
         <td><span class="up">31.5%</span></td>
@@ -319,14 +407,14 @@ body { font-family:"Apple SD Gothic Neo","Malgun Gothic",sans-serif; background:
       <tr>
         <td><strong>증감</strong></td>
         <td>—</td>
-        <td><span class="up">▼ 720,418원 절감</span></td>
-        <td><span class="up">▲ +14.0%p</span></td>
+        <td><span class="up">▼ 720,418원</span></td>
+        <td><span class="up">▲ +14.0%</span></td>
         <td><span class="up">▼ -51.8%</span></td>
         <td><span class="up">▲ +7건</span></td>
-        <td><span class="up">▲ +7.3%p</span></td>
+        <td><span class="up">▲ +7.3%</span></td>
         <td><span class="up">▲ 대폭개선</span></td>
-        <td><span class="up">▲ 목표초과</span></td>
-        <td><span class="up">▲ +13건</span></td>
+        <td><span class="up">목표<br>근접</span></td>
+        <td><span class="up">▲ +13</span></td>
       </tr>
     </tbody>
   </table>
@@ -374,17 +462,17 @@ body { font-family:"Apple SD Gothic Neo","Malgun Gothic",sans-serif; background:
 <div class="sec-title">📂 주간 OPS 리포트 목록</div>
 <div class="report-grid">
 
-  <!-- W3 리포트 -->
+  <!-- W3 -->
   <div class="report-card">
-    <div class="rc-header">
+    <div class="rc-header danger">
       <div>
-        <div class="rc-week">2026 · 04 · 3주차</div>
+        <div class="rc-week">📅 2026 · 04 · 3주차</div>
         <div class="rc-title">4월 3주차 OPS 리포트<br>광고 구조 붕괴 진단 &amp; 전략 전환 선언</div>
       </div>
       <div class="rc-badge red">W3 APR</div>
     </div>
     <div class="rc-body">
-      <div class="rc-period">📅 분석 기간: 2026.04.13 ~ 04.17 &nbsp;|&nbsp; 발행: 2026.04.19</div>
+      <div class="rc-period">분석 기간: 2026.04.13 ~ 04.17 &nbsp;·&nbsp; 발행: 2026.04.19</div>
       <div class="rc-kpi">
         <div class="rck danger">
           <div class="rck-label">수임 건수</div>
@@ -403,7 +491,7 @@ body { font-family:"Apple SD Gothic Neo","Malgun Gothic",sans-serif; background:
           <div class="rck-val">176,489원</div>
         </div>
         <div class="rck">
-          <div class="rck-label">리콜 잠재</div>
+          <div class="rck-label">리콜</div>
           <div class="rck-val">19건</div>
         </div>
         <div class="rck danger">
@@ -417,21 +505,23 @@ body { font-family:"Apple SD Gothic Neo","Malgun Gothic",sans-serif; background:
         <span class="rc-tag yellow">입찰가 초과 과금</span>
         <span class="rc-tag blue">전략 전환 필요</span>
       </div>
-      <a class="rc-btn" href="https://tkseoul77.github.io/4-3_MKT_OPS/" target="_blank">📊 3주차 리포트 보기 →</a>
+      <a class="rc-btn" href="https://tkseoul77.github.io/weekly_Report_Hub/4-3_MKT_OPS/" target="_blank">
+        3주차 리포트 전체 보기 <span class="arrow">→</span>
+      </a>
     </div>
   </div>
 
-  <!-- W4 리포트 -->
+  <!-- W4 -->
   <div class="report-card">
-    <div class="rc-header" style="background:linear-gradient(135deg,#0f2544,#1a5c3a);">
+    <div class="rc-header success">
       <div>
-        <div class="rc-week">2026 · 04 · 4주차</div>
+        <div class="rc-week">📅 2026 · 04 · 4주차</div>
         <div class="rc-title">4월 4주차 OPS 리포트<br>전 지표 반등 &amp; 위픽부스터 전략 분석</div>
       </div>
       <div class="rc-badge green">W4 APR</div>
     </div>
     <div class="rc-body">
-      <div class="rc-period">📅 분석 기간: 2026.04.20 ~ 04.24 &nbsp;|&nbsp; 발행: 2026.04.27</div>
+      <div class="rc-period">분석 기간: 2026.04.20 ~ 04.24 &nbsp;·&nbsp; 발행: 2026.04.27</div>
       <div class="rc-kpi">
         <div class="rck good">
           <div class="rck-label">수임 건수</div>
@@ -450,7 +540,7 @@ body { font-family:"Apple SD Gothic Neo","Malgun Gothic",sans-serif; background:
           <div class="rck-val">31.5%</div>
         </div>
         <div class="rck">
-          <div class="rck-label">리콜 잠재</div>
+          <div class="rck-label">리콜</div>
           <div class="rck-val">32건</div>
         </div>
         <div class="rck good">
@@ -459,54 +549,56 @@ body { font-family:"Apple SD Gothic Neo","Malgun Gothic",sans-serif; background:
         </div>
       </div>
       <div class="rc-tags">
-        <span class="rc-tag green">✅ ROAS 목표 달성</span>
+        <span class="rc-tag green">✅ ROAS 목표 근접</span>
         <span class="rc-tag green">수임율 KPI 달성</span>
         <span class="rc-tag yellow">CPA 목표 근접</span>
         <span class="rc-tag blue">위픽전략 분석</span>
       </div>
-      <a class="rc-btn" href="https://tkseoul77.github.io/4-4_MKT_OPS/" target="_blank">📊 4주차 리포트 보기 →</a>
+      <a class="rc-btn" href="https://tkseoul77.github.io/weekly_Report_Hub/4-4_MKT_OPS/" target="_blank">
+        4주차 리포트 전체 보기 <span class="arrow">→</span>
+      </a>
     </div>
   </div>
 
   <!-- W5 COMING SOON -->
   <div class="report-card coming">
-    <div class="rc-header">
+    <div class="rc-header coming">
       <div>
-        <div class="rc-week">2026 · 04~05 · 5주차</div>
-        <div class="rc-title">4월 5주차 OPS 리포트<br>리콜 32건 전환 결과 &amp; 위픽 도입 여부</div>
+        <div class="rc-week" style="color:#999;">📅 2026 · 04~05 · 5주차</div>
+        <div class="rc-title" style="color:#999;">4월 5주차 OPS 리포트<br>리콜 32건 전환 결과 &amp; 위픽 도입 여부</div>
       </div>
-      <div class="rc-badge coming">COMING</div>
+      <div class="rc-badge coming">SOON</div>
     </div>
     <div class="rc-body">
-      <div class="rc-period">📅 분석 기간: 2026.04.27 ~ 05.01 &nbsp;|&nbsp; 발행 예정: 2026.05.04</div>
+      <div class="rc-period">분석 기간: 2026.04.27 ~ 05.01 &nbsp;·&nbsp; 발행 예정: 2026.05.04</div>
       <div class="rc-kpi">
-        <div class="rck"><div class="rck-label">리콜 추적</div><div class="rck-val" style="color:var(--muted);">32건</div></div>
-        <div class="rck"><div class="rck-label">위픽 도입</div><div class="rck-val" style="color:var(--muted);">결정</div></div>
-        <div class="rck"><div class="rck-label">UTM 도입</div><div class="rck-val" style="color:var(--muted);">예정</div></div>
-        <div class="rck"><div class="rck-label">수임 목표</div><div class="rck-val" style="color:var(--muted);">CPA ↓</div></div>
-        <div class="rck"><div class="rck-label">CTR</div><div class="rck-val" style="color:var(--muted);">소재교체</div></div>
-        <div class="rck"><div class="rck-label">김태남</div><div class="rck-val" style="color:var(--muted);">이월</div></div>
+        <div class="rck"><div class="rck-label">리콜 추적</div><div class="rck-val" style="color:var(--muted);font-size:14px;">32건</div></div>
+        <div class="rck"><div class="rck-label">위픽 도입</div><div class="rck-val" style="color:var(--muted);font-size:14px;">결정</div></div>
+        <div class="rck"><div class="rck-label">UTM 도입</div><div class="rck-val" style="color:var(--muted);font-size:14px;">예정</div></div>
+        <div class="rck"><div class="rck-label">수임 목표</div><div class="rck-val" style="color:var(--muted);font-size:14px;">CPA↓</div></div>
+        <div class="rck"><div class="rck-label">소재교체</div><div class="rck-val" style="color:var(--muted);font-size:14px;">예정</div></div>
+        <div class="rck"><div class="rck-label">김태남</div><div class="rck-val" style="color:var(--muted);font-size:14px;">이월</div></div>
       </div>
       <div class="rc-tags">
         <span class="rc-tag gray">리콜 전환 추적</span>
         <span class="rc-tag gray">UTM 도입</span>
         <span class="rc-tag gray">위픽 결정</span>
       </div>
-      <div class="rc-btn coming">📋 발행 예정 (05.04)</div>
+      <div class="rc-btn coming">📋 발행 예정 — 2026.05.04</div>
     </div>
   </div>
 
   <!-- W6 COMING SOON -->
   <div class="report-card coming">
-    <div class="rc-header">
+    <div class="rc-header coming">
       <div>
-        <div class="rc-week">2026 · 05 · 6주차</div>
-        <div class="rc-title">5월 2주차 OPS 리포트<br>5월 광고 전략 &amp; 채널 최적화</div>
+        <div class="rc-week" style="color:#999;">📅 2026 · 05 · 2주차</div>
+        <div class="rc-title" style="color:#999;">5월 2주차 OPS 리포트<br>5월 광고 전략 &amp; 채널 최적화</div>
       </div>
-      <div class="rc-badge coming">COMING</div>
+      <div class="rc-badge coming">SOON</div>
     </div>
     <div class="rc-body">
-      <div class="rc-period">📅 분석 기간: 2026.05.04 ~ 05.08 &nbsp;|&nbsp; 발행 예정: 2026.05.11</div>
+      <div class="rc-period">분석 기간: 2026.05.04 ~ 05.08 &nbsp;·&nbsp; 발행 예정: 2026.05.11</div>
       <div class="rc-kpi">
         <div class="rck"><div class="rck-label">—</div><div class="rck-val" style="color:var(--muted);font-size:12px;">준비중</div></div>
         <div class="rck"><div class="rck-label">—</div><div class="rck-val" style="color:var(--muted);font-size:12px;">준비중</div></div>
@@ -515,10 +607,8 @@ body { font-family:"Apple SD Gothic Neo","Malgun Gothic",sans-serif; background:
         <div class="rck"><div class="rck-label">—</div><div class="rck-val" style="color:var(--muted);font-size:12px;">준비중</div></div>
         <div class="rck"><div class="rck-label">—</div><div class="rck-val" style="color:var(--muted);font-size:12px;">준비중</div></div>
       </div>
-      <div class="rc-tags">
-        <span class="rc-tag gray">준비중</span>
-      </div>
-      <div class="rc-btn coming">📋 발행 예정 (05.11)</div>
+      <div class="rc-tags"><span class="rc-tag gray">준비중</span></div>
+      <div class="rc-btn coming">📋 발행 예정 — 2026.05.11</div>
     </div>
   </div>
 
